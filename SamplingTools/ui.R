@@ -29,15 +29,15 @@ shinyUI(
        #numeric input
        numericInput("pop",
                    "Population Size:",
-                   value = 1000,
-                   step = 50),
+                   value = 5000,
+                   step = 25),
        #slider input
        sliderInput("alpha",
                    "Margin of Error (+/-)",
                    min = 1,
                    max = 10,
                    value = 5,
-                   step = 1)
+                   step = .5)
     ),
 
     # Show the output
