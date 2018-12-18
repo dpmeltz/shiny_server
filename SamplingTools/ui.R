@@ -29,7 +29,7 @@ shinyUI(
        #numeric input
        numericInput("pop",
                    "Population Size:",
-                   value = 1000,
+                   value = 2500,
                    step = 50),
        #slider input
        sliderInput("alpha",
@@ -37,7 +37,7 @@ shinyUI(
                    min = 1,
                    max = 10,
                    value = 5,
-                   step = 1)
+                   step = .5)
     ),
 
     # Show the output
