@@ -46,14 +46,10 @@ shinyServer(function(input, output) {
     boxes <- round(boxes/10^factor,0)
 
         # generate waffle plot based on Pop vs Samp
-    waffle <- waffle(boxes, rows=round(sqrt(sum(boxes)),0), size=0.25,
-                     colors = c("#EBAC00", "#FFDF80", "#444249"), equal = FALSE
+    waffle <- waffle(boxes, rows=round(sqrt(sum(boxes))*.75,0), size=.5, equal = TRUE,
+                     colors = c("#EBAC00", "#FFDF80", "#FFFFFF")
                      ) +
-      theme(legend.position = "bottom",
-            plot.background = element_rect(fill = "#444249", color = "#444249"),
-            axis.line = element_line(color="#444249"),
-            panel.grid = element_line(color="#444249"),
-            legend.text = element_text(color="#D3D3D3")
+      theme(legend.position = "bottom"
             )
     waffle
   })

@@ -1,6 +1,6 @@
 body {
   font-family: Calibri, helvetica, sans-serif;
-  background-color: #444249;
+  background-color: #FFF;
 }
 
 .well {
@@ -9,7 +9,7 @@ body {
 
 p, ul, li {
   font-size: 14px;
-  color: #D3D3D3;
+  color: #3D3D3D;
 }
 
 .title {
@@ -19,7 +19,7 @@ p, ul, li {
 }
 
 h1 {
-  color: #FFCC33;
+  color: #3D3D3D;
   font-size: 130%;
   font-weight: bold;
   font-style: italic;
@@ -27,9 +27,12 @@ h1 {
 }
 
 h2 {
-  color: #FFBF00;
+  color: #FFCC00;
   font-size: 115%;
   font-weight: bold;
+  background: #3D3D3D;
+  padding: 6px;
+  text-align: center;
 }
 
 h3 {
@@ -45,13 +48,12 @@ h4 {
 }
 
 hr {
-  background-color: #FFCC33;
+  background-color: #FFCC00;
   height: 1px;
 }
 
 #factorNote, #wafflePlot {
-  color: #D3D3D3;
+  color: #3D3D3D;
   text-align: center;
-  background-color: #444249;
   }
-  
+
