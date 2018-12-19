@@ -66,7 +66,11 @@ shinyServer(function(input, output) {
     factor <- nchar(popSize)-3
     factor <- if(factor<0) {0} else{factor}
 
+<<<<<<< HEAD
     factorNote <- c("NOTE: Each box represents ", 10^factor, " people")
+=======
+    factorNote <- c("NOTE: Each box represents ", 10^factor, if(factor <1) { " person"} else{" people"})
+>>>>>>> 099fd5d28f7dccb63471ce3e88f722e75c4d5867
 
     print(factorNote)
   })
