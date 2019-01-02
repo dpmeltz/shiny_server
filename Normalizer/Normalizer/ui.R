@@ -20,20 +20,17 @@ shinyUI(fluidPage(
     sidebarPanel(
        numericInput("Mean",
                    "Population Mean:",
-                   value = 30),
+                   value = 0),
        numericInput("SD",
                     "Standard Deviation:",
-                    value = 10),
+                    value = 1),
        radioButtons("direction",
                     "Direction",
                     choices = c("Less Than", "Greater Than", "Between", "Outside"),
-                    selected = "Less Than"),
-       numericInput("valmin",
-                    "Score (if between/outside, the lower)",
-                    value = 35),
-       numericInput("valmax",
-                    "Score (if between/outside, the higher)",
-                    value = 55)
+                    selected = "Between"),
+
+       uiOutput("inputValues")
+
     ),
 
     # Show a plot of the generated distribution
