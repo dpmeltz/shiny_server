@@ -16,13 +16,16 @@ shinyServer(function(input, output) {
     if (input$direction == "Between" | input$direction == "Outside")
       {tagList(numericInput("valmin",
                       "Lower Score:",
-                      value=-1.645),
+                      value=-1,
+                      step=.5),
         numericInput("valmax",
                    "Higher Score:",
-                   value = 1.645))}
+                   value = 1,
+                   step=.5))}
     else {numericInput("valmin",
                        "Score:",
-                       value=-1.645)}
+                       value=-1,
+                       step=.5)}
   })
   output$distPlot <- renderPlot({
 
@@ -40,8 +43,16 @@ shinyServer(function(input, output) {
     # draw the density graph
     curve <- ggplot(aes(x=xval), data=sample) +
       stat_function(fun=dnorm, args=list(sd=sigma, mean=m), size=2, color="#979797") +
-      geom_segment(aes(x=m, xend=m+sigma, y=height*0.61, yend=height*0.61), alpha=0.33) +
-      geom_vline(aes(xintercept=scoreMin), size = 2, color="blue", alpha=0.5) +
+      annotate('segment', x=m, xend=m+sigma, y=height*0.61, yend=height*0.61,
+               size = 2, alpha=0.33) +
+      geom_vline(aes(xintercept=scoreMin), size = 1.5, color="blue") +
+      annotate('segment', x=scoreMin,
+                       xend = if
+                       (input$direction == "Less Than" | input$direction == "Outside") {
+                        scoreMin-(.33*sigma)} else {
+                        scoreMin+(.33*sigma)},
+               y=height*1.05, yend=height*1.05, size = 1, color="blue",
+               arrow = arrow(length = unit(0.33,"cm"))) +
       geom_vline(aes(xintercept=m), size=2, alpha=0.33) +
       xlim(m-(4*sigma), m+(4*sigma)) +
       xlab("Scores") + ylab("") +
@@ -53,7 +64,14 @@ shinyServer(function(input, output) {
             panel.grid.major = element_blank(),
             legend.position="hidden")
 
-if (input$direction == "Less Than" | input$direction == "Greater Than") {curve} else {curve + geom_vline(aes(xintercept=scoreMax), size = 2, color="red", alpha=0.5)}
+if (input$direction == "Less Than" | input$direction == "Greater Than") {curve} else {curve + geom_vline(aes(xintercept=scoreMax), size = 1.5, color="red") +
+    annotate('segment', x=scoreMax,
+             xend = if
+             (input$direction == "Outside") {
+               scoreMax+(.33*sigma)} else {
+                 scoreMax-(.33*sigma)},
+             y=height*1.05, yend=height*1.05, size = 1, color="red",
+             arrow = arrow(length = unit(0.33,"cm")))}
 
 
   })
