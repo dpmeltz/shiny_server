@@ -11,7 +11,7 @@ library(shiny)
 
 # Define UI for application that estimates sample requirements
 shinyUI(
-  fluidPage(theme="ColgateStyle.css",
+  fluidPage(theme="sparkStyle.css",
 
   # Application title
   titlePanel("Sample Size Estimator"),
@@ -29,8 +29,8 @@ shinyUI(
        #numeric input
        numericInput("pop",
                    "Population Size:",
-                   value = 2500,
-                   step = 50),
+                   value = 5000,
+                   step = 25),
        #slider input
        sliderInput("alpha",
                    "Margin of Error (+/-)",
@@ -45,8 +45,8 @@ shinyUI(
       #headline number output
       h1(textOutput("sampleSize")),
       #graph output
-       plotOutput("wafflePlot"),
-      p(textOutput("factorNote"))
+      plotOutput("wafflePlot"),
+      textOutput("factorNote")
     )
   )
 ))

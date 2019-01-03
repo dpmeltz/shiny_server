@@ -46,9 +46,11 @@ shinyServer(function(input, output) {
     boxes <- round(boxes/10^factor,0)
 
         # generate waffle plot based on Pop vs Samp
-    waffle <- waffle(boxes, rows=round(sqrt(sum(boxes)),0), size=.5,
-                     colors = c("#D2010D", "#535353", "#FFFFFF")) +
-      theme(legend.position = "bottom")
+    waffle <- waffle(boxes, rows=round(sqrt(sum(boxes))*.75,0), size=.5, equal = TRUE,
+                     colors = c("#EBAC00", "#FFDF80", "#FFFFFF")
+                     ) +
+      theme(legend.position = "bottom"
+            )
     waffle
   })
 
@@ -60,7 +62,7 @@ shinyServer(function(input, output) {
     factor <- nchar(popSize)-3
     factor <- if(factor<0) {0} else{factor}
 
-    factorNote <- c("NOTE: Each box represents roughly ", 10^factor, " people")
+    factorNote <- c("NOTE: Each box represents ", 10^factor, if(factor <1) { " person"} else{" people"})
 
     print(factorNote)
   })
