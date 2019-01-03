@@ -58,4 +58,26 @@ if (input$direction == "Less Than" | input$direction == "Greater Than") {curve} 
 
   })
 
+  output$areaText <- renderText({
+
+    # generate curve based on input from ui.R
+    m <- as.numeric(input$Mean)
+    sigma <- as.numeric(input$SD)
+    scoreMin <- as.numeric(input$valmin)
+    scoreMax <- as.numeric(input$valmax)
+
+    minDown <- pnorm(scoreMin, m, sigma, lower.tail = TRUE)
+    minUp <- pnorm(scoreMin, m, sigma, lower.tail = FALSE)
+    maxDown <- pnorm(scoreMax, m, sigma, lower.tail = TRUE)
+    maxUp <- pnorm(scoreMax, m, sigma, lower.tail = FALSE)
+
+    area <- if (input$direction == "Less Than") {minDown} else
+    if (input$direction == "Greater Than") {minUp} else
+    if (input$direction == "Between") {minUp+maxDown-1} else
+    {minDown+maxUp}
+
+    paste("Roughly ",round(area*100,2),"% of the curve is within the selected area", sep="")
+  })
+
+
 })
