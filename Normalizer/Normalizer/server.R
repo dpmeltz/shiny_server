@@ -58,4 +58,24 @@ if (input$direction == "Less Than" | input$direction == "Greater Than") {curve} 
 
   })
 
+  output$dataReadout <- renderText ({
+    m <- as.numeric(input$Mean)
+    sigma <- as.numeric(input$SD)
+    scoreMin <- as.numeric(input$valmin)
+    scoreMax <- as.numeric(input$valmax)
+
+    area <- if (input$direction == "Less Than"){
+    round(pnorm(scoreMin, mean = m, sd = sigma, lower.tail = TRUE)*100,2)
+    } else if (input$direction == "Greater Than"){
+      round(pnorm(scoreMin, mean = m, sd = sigma, lower.tail = FALSE)*100,2)
+    } else if (input$direction == "Between") {
+      round((pnorm(scoreMin, mean = m, sd = sigma, lower.tail = FALSE)-.5 +
+               pnorm(scoreMax, mean = m, sd = sigma, lower.tail = TRUE)-.5)*100,2)
+    } else if (input$direction == "Outside"){
+      round(pnorm(scoreMin, mean = m, sd = sigma, lower.tail = FALSE)*100,2)}
+
+    paste("Roughly ",area,"% of the sample is in the selected area", sep="")
+
+  })
+
 })
