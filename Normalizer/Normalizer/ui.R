@@ -27,7 +27,7 @@ shinyUI(fluidPage(
        radioButtons("direction",
                     "Direction",
                     choices = c("Less Than", "Greater Than", "Between", "Outside"),
-                    selected = "Between"),
+                    selected = "Less Than"),
 
        uiOutput("inputValues")
 

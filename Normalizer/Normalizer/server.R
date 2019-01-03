@@ -39,7 +39,7 @@ shinyServer(function(input, output) {
 
     # draw the density graph
     curve <- ggplot(aes(x=xval), data=sample) +
-      stat_function(fun=dnorm, args=list(sd=sigma, mean=m)) +
+      stat_function(fun=dnorm, args=list(sd=sigma, mean=m), size=2, color="#979797") +
       geom_segment(aes(x=m, xend=m+sigma, y=height*0.61, yend=height*0.61), alpha=0.33) +
       geom_vline(aes(xintercept=scoreMin), size = 2, color="blue", alpha=0.5) +
       geom_vline(aes(xintercept=m), size=2, alpha=0.33) +
