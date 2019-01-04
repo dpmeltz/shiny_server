@@ -87,6 +87,7 @@ if (input$direction == "Less Than" | input$direction == "Greater Than") {curve}
     {minDown+maxUp}
 
     paste("Roughly ",round(area*100,2),"% of the curve is within the selected area", sep="")
+
   })
 
 })
