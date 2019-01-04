@@ -1,8 +1,8 @@
 library(shiny)
 
 # Define UI for application that illustrates area under a normal curve
-shinyUI(fluidPage(
-
+shinyUI(
+  fluidPage(theme="sparkStyle.css",
   # Application title
   titlePanel("Area Under Normal Curve Finder"),
 
@@ -30,5 +30,5 @@ shinyUI(fluidPage(
        em(textOutput("areaText"))
 
     )
-  )
+)
 ))

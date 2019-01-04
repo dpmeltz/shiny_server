@@ -1,23 +1,25 @@
-
-
 body {
   font-family: Calibri, helvetica, sans-serif;
+  background-color: #FFF;
 }
 
+.well {
+  background-color: #E0E0E0;
+}
 
 p, ul, li {
   font-size: 14px;
-  color: #353535;
+  color: #3D3D3D;
 }
-
 
 .title {
   margin-right: 100px;
   margin-left: 100px;
+  color: #FFCC33;
 }
 
 h1 {
-  color: #D2010D;
+  color: #3D3D3D;
   font-size: 130%;
   font-weight: bold;
   font-style: italic;
@@ -25,13 +27,16 @@ h1 {
 }
 
 h2 {
-  color: #535353;
+  color: #FFCC00;
   font-size: 115%;
   font-weight: bold;
+  background: #3D3D3D;
+  padding: 6px;
+  text-align: center;
 }
 
 h3 {
-  color: #979797;
+  color: #FFBF00;
   font-size: 110%;
   font-weight: bold;
 }
@@ -43,6 +48,11 @@ h4 {
 }
 
 hr {
-  background-color: #D6D6D6;
+  background-color: #FFCC00;
   height: 1px;
 }
+
+#factorNote, #wafflePlot {
+  color: #3D3D3D;
+  text-align: center;
+  }
