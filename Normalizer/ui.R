@@ -36,11 +36,8 @@ shinyUI(fluidPage(
     # Show a plot of the generated distribution
     mainPanel(
        plotOutput("distPlot"),
-<<<<<<< HEAD
-       textOutput("dataReadout")
-=======
        textOutput("areaText")
->>>>>>> 680f4e201a0ed6116eb7695d5724dff8ada63ec7
+
     )
   )
 ))
