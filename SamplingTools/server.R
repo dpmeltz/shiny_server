@@ -14,41 +14,51 @@ library(waffle)
 # Define server logic required to draw output
 shinyServer(function(input, output) {
 
-  output$sampleSize <- renderText({
-    # Process Numbers
-    #Population Size
-    popSize <- as.numeric(input$pop)
-    #Alpha level
-    alpha <- input$alpha/100
-    #Confidence level
-    Z <- qnorm(((100-input$conf)/2)/100)
-    #Estimate Sample (round up to whole person)
-    sampSize <- round(((Z^2)*(.25)/(alpha^2)) / (1+((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
+  #Population Size
+  popSize <- reactive({as.numeric(input$pop)})
+  #Alpha level
+  alpha <- reactive({input$alpha/100})
+  #Confidence level
+  Z <- reactive({qnorm(((100 - input$conf)/2)/100)})
 
-    sample <- c(sampSize, " people required")
+  output$sampleSize <- renderText({
+    #Process Numbers
+    #Population Size
+    popSize <- popSize()
+    #Alpha level
+    alpha <- alpha()
+    #Confidence level
+    Z <- Z()
+    #Estimate Sample (round up to whole person)
+    sampSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
+
+    sample <- paste(sampSize, " people required (", round(sampSize/popSize*100,2),
+                "% of population)", sep="")
       print(sample)
   })
 
   output$wafflePlot <- renderPlot({
-    # Process Numbers
+    #Process Numbers
     #Population Size
-    popSize <- as.numeric(input$pop)
+    popSize <- popSize()
     #Alpha level
-    alpha <- input$alpha/100
+    alpha <- alpha()
     #Confidence level
-    Z <- qnorm(((100-input$conf)/2)/100)
+    Z <- Z()
     #Estimate Sample (round up to whole person)
-    sampSize <- round(((Z^2)*(.25)/(alpha^2)) / (1+((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
+    sampSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
     #Pop vs Samp
-    boxes <- c("Sampled" = sampSize, "Not Sampled" = (popSize-sampSize))
-    factor <- nchar(popSize)-3
-    factor <- if(factor<0) {0} else{factor}
+    boxes <- c("Sampled" = sampSize, "Not Sampled" = (popSize - sampSize))
+    factor <- nchar(popSize) - 3
+    factor <- if (factor < 0) {0} else {factor}
     boxes <- round(boxes/10^factor,0)
 
         # generate waffle plot based on Pop vs Samp
-    waffle <- waffle(boxes, rows=round(sqrt(sum(boxes))*.75,0), size=.5, equal = TRUE,
-                     colors = c("#EBAC00", "#FFDF80", "#FFFFFF")
-                     ) +
+    waffle <- waffle(boxes,
+                     rows = round(sqrt(sum(boxes))*.75,0),
+                     size = .5,
+                     equal = TRUE,
+                     colors = c("#EBAC00", "#FFDF80", "#FFFFFF")) +
       theme(legend.position = "bottom"
             )
     waffle
@@ -57,12 +67,13 @@ shinyServer(function(input, output) {
   output$factorNote <- renderText({
     # Process Numbers
     #Population Size
-    popSize <- as.numeric(input$pop)
+    popSize <- popSize()
     #factor calc
-    factor <- nchar(popSize)-3
-    factor <- if(factor<0) {0} else{factor}
+    factor <- nchar(popSize) - 3
+    factor <- if (factor < 0) {0} else {factor}
 
-    factorNote <- c("NOTE: Each box represents ", 10^factor, if(factor <1) { " person"} else{" people"})
+    factorNote <- c("NOTE: Each box represents ", 10^factor, if (factor < 1) {
+      " person"} else {" people"})
 
     print(factorNote)
   })
