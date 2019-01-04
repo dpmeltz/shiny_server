@@ -1,15 +1,7 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
 library(ggplot2)
-# Define server logic required to draw a histogram
+
+# Define variables required to draw desired curve
 shinyServer(function(input, output) {
 
   output$inputValues <- renderUI({
@@ -47,12 +39,12 @@ shinyServer(function(input, output) {
                size = 2, alpha=0.33) +
       geom_vline(aes(xintercept=scoreMin), size = 1.5, color="blue") +
       annotate('segment', x=scoreMin,
-                       xend = if
-                       (input$direction == "Less Than" | input$direction == "Outside") {
-                        scoreMin-(.33*sigma)} else {
-                        scoreMin+(.33*sigma)},
-               y=height*1.05, yend=height*1.05, size = 1, color="blue",
-               arrow = arrow(length = unit(0.33,"cm"))) +
+                xend = if
+                 (input$direction == "Less Than" | input$direction == "Outside") {
+                  scoreMin-(.33*sigma)} else {
+                  scoreMin+(.33*sigma)},
+                y=height*1.05, yend=height*1.05, size = 1, color="blue",
+                arrow = arrow(length = unit(0.33,"cm"))) +
       geom_vline(aes(xintercept=m), size=2, alpha=0.33) +
       xlim(m-(4*sigma), m+(4*sigma)) +
       xlab("Scores") + ylab("") +
@@ -64,15 +56,15 @@ shinyServer(function(input, output) {
             panel.grid.major = element_blank(),
             legend.position="hidden")
 
-if (input$direction == "Less Than" | input$direction == "Greater Than") {curve} else {curve + geom_vline(aes(xintercept=scoreMax), size = 1.5, color="red") +
-    annotate('segment', x=scoreMax,
-             xend = if
-             (input$direction == "Outside") {
-               scoreMax+(.33*sigma)} else {
-                 scoreMax-(.33*sigma)},
-             y=height*1.05, yend=height*1.05, size = 1, color="red",
-             arrow = arrow(length = unit(0.33,"cm")))}
-
+if (input$direction == "Less Than" | input$direction == "Greater Than") {curve}
+    else {curve +
+        geom_vline(aes(xintercept=scoreMax), size = 1.5, color="red") +
+        annotate('segment', x=scoreMax,
+          xend = if
+            (input$direction == "Outside") {scoreMax+(.33*sigma)} else {
+            scoreMax-(.33*sigma)},
+          y=height*1.05, yend=height*1.05, size = 1, color="red",
+          arrow = arrow(length = unit(0.33,"cm")))}
 
   })
 
