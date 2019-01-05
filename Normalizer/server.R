@@ -8,24 +8,20 @@ shinyServer(function(input, output) {
   sigma <- reactive({as.numeric(input$SD)})
   sample <- reactive({data.frame(rnorm(250, m(), sigma()))})
 
-
   output$inputValues <- renderUI({
-
-    m <- m()
-    sigma <- sigma()
 
     if (input$direction == "Between" | input$direction == "Outside")
       {tagList(numericInput("valmin",
                             "Lower Score:",
-                            value = m - sigma,
+                            value = -1.96,
                             step = .5),
                numericInput("valmax",
                             "Higher Score:",
-                            value = m + sigma,
+                            value = 1.96,
                             step = .5))}
     else {numericInput("valmin",
                        "Score:",
-                       value = m + sigma,
+                       value = 1.96,
                        step = .5)}
   })
 
