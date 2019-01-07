@@ -49,7 +49,7 @@ shinyServer(function(input, output) {
     sampSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
     #Pop vs Samp
     boxes <- c("Sampled" = sampSize, "Not Sampled" = (popSize - sampSize))
-    factor <- nchar(popSize) - 3
+    factor <- nchar(format(popSize, scientific = F)) - 3
     factor <- if (factor < 0) {0} else {factor}
     boxes <- round(boxes/10^factor,0)
 
@@ -69,7 +69,7 @@ shinyServer(function(input, output) {
     #Population Size
     popSize <- popSize()
     #factor calc
-    factor <- nchar(popSize) - 3
+    factor <- nchar(format(popSize, scientific = F)) - 3
     factor <- if (factor < 0) {0} else {factor}
 
     factorNote <- c("NOTE: Each box represents ", 10^factor, if (factor < 1) {
