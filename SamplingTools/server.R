@@ -20,6 +20,8 @@ shinyServer(function(input, output) {
   alpha <- reactive({input$alpha/100})
   #Confidence level
   Z <- reactive({qnorm(((100 - input$conf)/2)/100)})
+  #response rate
+  respRate <- reactive({input$response/100})
 
   output$sampleSize <- renderText({
     #Process Numbers
@@ -30,9 +32,10 @@ shinyServer(function(input, output) {
     #Confidence level
     Z <- Z()
     #Estimate Sample (round up to whole person)
-    sampSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
+    respSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
+    sampSize <- respSize/respRate()
 
-    sample <- paste(sampSize, " people required (", round(sampSize/popSize*100,2),
+    sample <- paste(respSize, " responses required (Invite ", round(sampSize/popSize*100,2),
                 "% of population)", sep="")
       print(sample)
   })
@@ -46,9 +49,13 @@ shinyServer(function(input, output) {
     #Confidence level
     Z <- Z()
     #Estimate Sample (round up to whole person)
-    sampSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
+    respSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
+    sampSize <- (respSize/respRate()) - respSize
+
     #Pop vs Samp
-    boxes <- c("Sampled" = sampSize, "Not Sampled" = (popSize - sampSize))
+    boxes <- c("Expected Responses" = respSize,
+               "Sampled" = sampSize,
+               "Not Sampled" = (popSize - sampSize))
     factor <- nchar(format(popSize, scientific = F)) - 3
     factor <- if (factor < 0) {0} else {factor}
     boxes <- round(boxes/10^factor,0)
@@ -58,7 +65,7 @@ shinyServer(function(input, output) {
                      rows = round(sqrt(sum(boxes))*.75,0),
                      size = .5,
                      equal = TRUE,
-                     colors = c("#EBAC00", "#FFDF80", "#FFFFFF")) +
+                     colors = c("#EBAC00", "#FFDF80", "#979797", "#FFFFFF")) +
       theme(legend.position = "bottom"
             )
     waffle

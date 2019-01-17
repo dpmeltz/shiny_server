@@ -23,9 +23,9 @@ shinyUI(
        sliderInput("conf",
                    "Confidence Level:",
                    min = 80,
-                   max = 99.9,
+                   max = 100,
                    value = 95,
-                   step = .1),
+                   step = .5),
        #numeric input
        numericInput("pop",
                    "Population Size:",
@@ -37,7 +37,14 @@ shinyUI(
                    min = 1,
                    max = 10,
                    value = 5,
-                   step = .5)
+                   step = .5),
+       #slider input
+       sliderInput("response",
+                   "Expected response rate:",
+                   min = 5,
+                   max = 100,
+                   value = 60,
+                   step = 5)
     ),
 
     # Show the output
