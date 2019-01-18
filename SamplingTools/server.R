@@ -34,10 +34,10 @@ shinyServer(function(input, output) {
     #Estimate Sample (round up to whole person)
     respSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
     sampSize <- respSize/respRate()
-    sampSizePrint <- if(sampSize > popSize) {popSize} else {sampSize}
+    sampSizePrint <- if (sampSize > popSize) {popSize} else {sampSize}
 
     sample <- paste(respSize, " responses required (invite ", round(sampSizePrint,0),
-                " people", if(sampSize > popSize) {" and cross your fingers)"} else {")"}, sep="")
+                " people", if (sampSize > popSize) {" and cross your fingers)"} else {")"}, sep = "")
       print(sample)
   })
 
@@ -51,13 +51,16 @@ shinyServer(function(input, output) {
     Z <- Z()
     #Estimate Sample (round up to whole person)
     respSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
-    sampSize <- (respSize/respRate()) - respSize
-    sampSize <- if(sampSize > popSize) {popSize} else {sampSize}
+    sampSize <- round((respSize/respRate()), 0)
+    sampSizeVis <- if (sampSize > popSize) {popSize - respSize} else {
+      sampSize - respSize}
+    sampSizeVis <- round(sampSizeVis + .49, 0)
 
     #Pop vs Samp
-    boxes <- c("Expected Responses" = respSize,
-               "Sampled" = sampSize,
-               "Not Sampled" = (popSize - sampSize))
+    boxes <- c("Required Responses" = respSize,
+               "Sampled" = sampSizeVis,
+               "Not Sampled" = if (sampSize > popSize) {0}
+               else {(popSize - sampSizeVis - respSize)})
     factor <- nchar(format(popSize, scientific = F)) - 3
     factor <- if (factor < 0) {0} else {factor}
     boxes <- round(boxes/10^factor,0)
