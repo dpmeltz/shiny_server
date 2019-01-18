@@ -23,7 +23,7 @@ shinyUI(
        sliderInput("conf",
                    "Confidence Level:",
                    min = 80,
-                   max = 100,
+                   max = 99.5,
                    value = 95,
                    step = .5),
        #numeric input
