@@ -50,11 +50,10 @@ shinyServer(function(input, output) {
     #Confidence level
     Z <- Z()
     #Estimate Sample (round up to whole person)
-    respSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))) + .49, 0)
-    sampSize <- round((respSize/respRate()), 0)
-    sampSizeVis <- if (sampSize > popSize) {popSize - respSize} else {
-      sampSize - respSize}
-    sampSizeVis <- round(sampSizeVis + .49, 0)
+    respSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))), 0)
+    sampSize <- respSize/respRate()
+    sampSizeVis <- round(if (sampSize > popSize) {popSize - respSize} else {
+      sampSize - respSize}, 0)
 
     #Pop vs Samp
     boxes <- c("Required Responses" = respSize,
