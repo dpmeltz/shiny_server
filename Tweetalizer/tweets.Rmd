@@ -6,7 +6,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(rmarkdown)
+
 library(twitteR)
 library(ROAuth)
 library(httr)
@@ -32,12 +32,12 @@ tun<-function(x) gsub("[@][a - zA - Z0 - 9_]{1,15}", "", x)
 ellipsis <- function(x) gsub("\u2026", "", x )
 
 clean_corpus <- function(corpus){
-#  corpus <- tm_map(corpus, tun)
   corpus <- tm_map(corpus, urlPat) 
   corpus <- tm_map(corpus, emlPat)
   corpus <- tm_map(corpus, ellipsis)
-#  corpus <- tm_map(corpus, tt)
-  corpus <- tm_map(corpus, function(x) iconv(x, to='UTF-8-MAC', sub='byte'))
+  corpus <- tm_map(corpus, tt)
+  corpus <- tm_map(corpus, tun)  
+  #corpus <- tm_map(corpus, function(x) iconv(x, to='UTF-8', sub='byte'))
   corpus <- tm_map(corpus, removePunctuation)
   coprus <- tm_map(corpus, stripWhitespace) #Strips White Space 
   corpus <- tm_map(corpus, tolower) #Changes case to lower case 
