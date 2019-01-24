@@ -49,23 +49,38 @@ shinyServer(function(input, output) {
     alpha <- alpha()
     #Confidence level
     Z <- Z()
-    #Estimate Sample (round up to whole person)
-    respSize <- round(((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize))), 0)
+
+    #Estimate responses required
+    respSize <- ((Z^2)*(.25)/(alpha^2)) / (1 + ((Z^2)*(.25)/(alpha^2*popSize)))
+
+    #Estimate sample size required based on response rate expected
     sampSize <- respSize/respRate()
-    sampSizeVis <- round(if (sampSize > popSize) {popSize - respSize} else {
-      sampSize - respSize}, 0)
+    #Set to required sample minus required responses (max at population max)
+    sampSizeVis <- (if (sampSize > popSize) {popSize - respSize} else {
+      sampSize - respSize})
+
+    #Estimate not sampled population
+    nonSampSize <- popSize - sampSizeVis - respSize
+
+    #Set log factor
+    factor <- nchar(format(popSize, scientific = F)) - 3
+    #Min factor of 0 (min people/box == 1)
+    factor <- if (factor < 0) {0} else {factor}
+
 
     #Pop vs Samp
     boxes <- c("Required Responses" = respSize,
                "Sampled" = sampSizeVis,
-               "Not Sampled" = if (sampSize > popSize) {0}
-               else {(popSize - sampSizeVis - respSize)})
-    factor <- nchar(format(popSize, scientific = F)) - 3
-    factor <- if (factor < 0) {0} else {factor}
-    boxes <- round(boxes/10^factor,0)
+               "Not Sampled" = nonSampSize)
+    #Simplify by factor
+    boxes <- round(boxes/10^factor, 0)
+    sumBox <- sum(boxes)
+    boxViz <- c("Requires Responses" = boxes["Required Responses"],
+                "Sampled" = boxes["Sampled"],
+                "Not Sampled" = sumBox - boxes["Required Responses"] - boxes["Sampled"])
 
         # generate waffle plot based on Pop vs Samp
-    waffle <- waffle(boxes,
+    waffle <- waffle(boxViz,
                      rows = round(sqrt(sum(boxes))*.75,0),
                      size = .5,
                      equal = TRUE,
