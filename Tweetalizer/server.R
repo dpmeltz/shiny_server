@@ -26,10 +26,12 @@ setup_twitter_oauth(api_key, api_secret, access_token, access_token_secret)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
 
+  tweets <- reactive(userTimeline(input$search_phrase, n = input$n_count, maxID = NULL, sinceID = NULL, includeRts = TRUE))
+
   output$wordcloud <- renderPlot({
     #Import tweets and create data frame
-    tweets <- userTimeline(input$search_phrase, n = input$n_count, maxID = NULL, sinceID = NULL, includeRts = TRUE)
-    tweets_df <- twListToDF(tweets)
+    #tweets <- userTimeline(input$search_phrase, n = input$n_count, maxID = NULL, sinceID = NULL, includeRts = TRUE)
+    tweets_df <- twListToDF(tweets())
 
       #Symbols to remove
       remove_reg <- "&amp;|&lt;|&gt;"
@@ -47,23 +49,20 @@ shinyServer(function(input, output) {
       count(word, sort = TRUE) %>%
        head(50)
 
-     #Rotate words for fit
-     #tweet_sort <- tweet_sort %>%
-     #  mutate(angle = 45 * sample(-2:2, n(), replace = TRUE, prob = c(1, 1, 4, 1, 1)))
 
      #Plot
      wordcloud <- ggplot(tweet_sort, aes(
        label = word, size = n)) +
        geom_text_wordcloud_area(shape = 'circle', eccentricity = 1.5) +
-       scale_size_area(max_size = 24) +
+       scale_size_area(max_size = 20) +
        theme_minimal()
 
      wordcloud
   })
 
   output$sparkline <- renderPlot({
-    tweets <- userTimeline(input$search_phrase, n = input$n_count, maxID = NULL, sinceID = NULL, includeRts = TRUE)
-    tweets_df <- twListToDF(tweets)
+    #tweets <- userTimeline(input$search_phrase, n = input$n_count, maxID = NULL, sinceID = NULL, includeRts = TRUE)
+    tweets_df <- twListToDF(tweets())
 
     tweets_df$date <- format(as.POSIXct(
       tweets_df$created, format = '%Y-%m-/%d %H:%M:%S'), format = '%Y/%m/%d')
@@ -71,7 +70,14 @@ shinyServer(function(input, output) {
     date_count <- tweets_df %>%
       count(date, sort = FALSE)
 
-    ggplot(date_count, aes(x = date, y = n, group = 1)) + geom_point() + geom_line()
+    date_count$date <- as.Date(date_count$date)
+
+    ggplot(date_count, aes(x = date, y = n, group = 1)) +
+      geom_point() +
+      geom_line() +
+      scale_x_date(date_breaks = "1 week", date_labels = "%m/%d") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle=60, hjust=1))
 
   })
 
