@@ -12,7 +12,8 @@ library(twitteR)
 library(ROAuth)
 library(httr)
 library(tidyverse)
-
+library(tidytext)
+library(ggwordcloud)
 
 #set twitter
 api_key <- "bbmeTHKmB0yOp2tNxdi3N4yBe" # your api_key
@@ -22,24 +23,56 @@ access_token_secret <- "FwT0B8oVmuwwJz6aLUBM7ybJ1Vyvdnyk9UEreDFwsowPt" # your ac
 setup_twitter_oauth(api_key, api_secret, access_token, access_token_secret)
 
 
-
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
 
   output$wordcloud <- renderPlot({
+    #Import tweets and create data frame
+    tweets <- userTimeline(input$search_phrase, n = input$n_count, maxID = NULL, sinceID = NULL, includeRts = TRUE)
+    tweets_df <- twListToDF(tweets)
 
-    tweets <- userTimeline(isolate(input$search_phrase), n = isolate(input$n_count), maxID = NULL, sinceID = NULL, includeRts = TRUE)
-    tweets_df <- twListToDF(tweets) #Convert to Data Frame
-    text <- Corpus(VectorSource(tweets_df$text), readerControl = list(language = "eng"))
-    tdm <- TermDocumentMatrix(text)
-    m1 <- as.matrix(tdm)
-    v1 <- sort(rowSums(m1),decreasing = TRUE)
-    d1 <- data.frame(word = names(v1),freq = v1)
+      #Symbols to remove
+      remove_reg <- "&amp;|&lt;|&gt;"
+      #Clean tweets
+      tidy_tweets <- tweets_df %>%
+      filter(!str_detect(text, "^RT")) %>%
+      mutate(text = str_remove_all(text, remove_reg)) %>%
+      unnest_tokens(word, text, token = "tweets") %>%
+      filter(!word %in% stop_words$word,
+             !word %in% str_remove_all(stop_words$word, "'"),
+             str_detect(word, "[a-z]"))
 
-    #Remove Stop Words
-    #Remove Punctuation
+      #Take top 50 words
+      tweet_sort <- tidy_tweets %>%
+      count(word, sort = TRUE) %>%
+       head(50)
 
-    wordcloud(d1$word,d1$freq, min.freq = 2,max.words = 200, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(9, "Greys"), scale = c(5,.5))
-  }, width = 650, height = 650)
+     #Rotate words for fit
+     #tweet_sort <- tweet_sort %>%
+     #  mutate(angle = 45 * sample(-2:2, n(), replace = TRUE, prob = c(1, 1, 4, 1, 1)))
+
+     #Plot
+     wordcloud <- ggplot(tweet_sort, aes(
+       label = word, size = n)) +
+       geom_text_wordcloud_area(shape = 'circle', eccentricity = 1.5) +
+       scale_size_area(max_size = 24) +
+       theme_minimal()
+
+     wordcloud
+  })
+
+  output$sparkline <- renderPlot({
+    tweets <- userTimeline(input$search_phrase, n = input$n_count, maxID = NULL, sinceID = NULL, includeRts = TRUE)
+    tweets_df <- twListToDF(tweets)
+
+    tweets_df$date <- format(as.POSIXct(
+      tweets_df$created, format = '%Y-%m-/%d %H:%M:%S'), format = '%Y/%m/%d')
+
+    date_count <- tweets_df %>%
+      count(date, sort = FALSE)
+
+    ggplot(date_count, aes(x = date, y = n, group = 1)) + geom_point() + geom_line()
 
   })
+
+})
