@@ -75,9 +75,11 @@ shinyServer(function(input, output) {
     ggplot(date_count, aes(x = date, y = n, group = 1)) +
       geom_point() +
       geom_line() +
-      scale_x_date(date_breaks = "1 week", date_labels = "%m/%d") +
-      theme_minimal() +
-      theme(axis.text.x = element_text(angle=60, hjust=1))
+      scale_x_date(date_breaks = "1 day", date_labels = "%m/%d") +
+      ylim(0,max(date_count$n)) +
+      theme(axis.text.x = element_text(angle=60, hjust=1),
+            panel.grid = element_blank(),
+            panel.background = element_blank())
 
   })
 
