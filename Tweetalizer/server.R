@@ -33,6 +33,12 @@ shinyServer(function(input, output) {
     #tweets <- userTimeline(input$search_phrase, n = input$n_count, maxID = NULL, sinceID = NULL, includeRts = TRUE)
     tweets_df <- twListToDF(tweets())
 
+  #####
+  # TO DO
+  #   Remove images?
+  #   Remove URLs?
+  #####
+
       #Symbols to remove
       remove_reg <- "&amp;|&lt;|&gt;"
       #Clean tweets
