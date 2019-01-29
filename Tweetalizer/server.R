@@ -13,6 +13,7 @@ library(ROAuth)
 library(httr)
 library(tidyverse)
 library(tidytext)
+library(qdapRegex)
 library(ggwordcloud)
 
 #set twitter
@@ -39,19 +40,33 @@ shinyServer(function(input, output) {
   #   Remove URLs?
   #####
 
+
       #Symbols to remove
       remove_reg <- "&amp;|&lt;|&gt;"
+      remove_handles <- "@[a-z,A-Z]*"
+
       #Clean tweets
+
+
+if (input$filter_handles == TRUE) {
+  tweets_df <- tweets_df %>%
+    mutate(text = str_remove_all(text, remove_handles))}
+
       tidy_tweets <- tweets_df %>%
       filter(!str_detect(text, "^RT")) %>%
-      mutate(text = str_remove_all(text, remove_reg)) %>%
+      mutate(text = str_remove_all(text, remove_reg))
+
+
+      tidy_tokens <- tidy_tweets %>%
       unnest_tokens(word, text, token = "tweets") %>%
       filter(!word %in% stop_words$word,
              !word %in% str_remove_all(stop_words$word, "'"),
              str_detect(word, "[a-z]"))
 
+
+
       #Take top 50 words
-      tweet_sort <- tidy_tweets %>%
+      tweet_sort <- tidy_tokens %>%
       count(word, sort = TRUE) %>%
        head(50)
 
@@ -77,13 +92,14 @@ shinyServer(function(input, output) {
       count(date, sort = FALSE)
 
     date_count$date <- as.Date(date_count$date)
+    date_count
 
     ggplot(date_count, aes(x = date, y = n, group = 1)) +
       geom_point() +
       geom_line() +
-      scale_x_date(date_breaks = "1 day", date_labels = "%m/%d") +
+      scale_x_date(date_breaks = "2 days", date_labels = "%m/%d") +
       ylim(0,max(date_count$n)) +
-      theme(axis.text.x = element_text(angle=60, hjust=1),
+      theme(axis.text.x = element_text(angle = 60, hjust = 1),
             panel.grid = element_blank(),
             panel.background = element_blank())
 

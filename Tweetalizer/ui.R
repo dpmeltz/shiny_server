@@ -13,7 +13,7 @@ library(shiny)
 fluidPage(
       selectInput("n_count", label = "Number of tweets", choices = c(25, 50, 100, 200, 500), selected = 100),
       textInput("search_phrase", label = "Username:", value = "WashingtonPost"),
-      br(),
+      checkboxInput("filter_handles", label = "Filter handles", value = FALSE),
       submitButton("Refresh"),
 
     # Show a plot of the generated distribution
