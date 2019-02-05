@@ -89,16 +89,18 @@ if (input$filter_handles == TRUE) {
       tweets_df$created, format = '%Y-%m-/%d %H:%M:%S'), format = '%Y/%m/%d')
 
     date_count <- tweets_df %>%
-      count(date, sort = FALSE)
+      mutate(date = as.Date(date)) %>%
+      count(date, sort = FALSE) %>%
+      complete(date = seq.Date(min(date), max(date), by = "day")) %>%
+      rename(count = n)
 
-    date_count$date <- as.Date(date_count$date)
-    date_count
+    date_count$count[is.na(date_count$count)] <- 0
 
-    ggplot(date_count, aes(x = date, y = n, group = 1)) +
+    ggplot(date_count, aes(x = date, y = count, group = 1)) +
       geom_point() +
       geom_line() +
-      scale_x_date(date_breaks = "2 days", date_labels = "%m/%d") +
-      ylim(0,max(date_count$n)) +
+      scale_x_date(date_breaks = "7 days", date_labels = "%m/%d") +
+      ylim(0,max(date_count$count)) +
       theme(axis.text.x = element_text(angle = 60, hjust = 1),
             panel.grid = element_blank(),
             panel.background = element_blank())
