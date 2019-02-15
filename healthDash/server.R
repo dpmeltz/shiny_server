@@ -9,14 +9,23 @@
 
 library(shiny)
 library(shinydashboard)
+library(readr)
+library(ggplot2)
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-  set.seed(122)
-  histdata <- rnorm(500)
+  approval_topline <- read_csv("approval_topline.csv")
+
 
   output$plot1 <- renderPlot({
-    data <- histdata[seq_len(input$slider)]
-    hist(data)
+    plot <- ggplot(approval_topline, aes(y = approve_estimate, x = as.Date(modeldate))) +
+      geom_point() +
+      scale_x_date(date_breaks = "6 months", date_labels = "%m/%d/%y") +
+      ylim(25,75) +
+      xlim(input$date) +
+      theme(axis.text.x = element_text(angle = 60, hjust = 1),
+            panel.grid = element_blank(),
+            panel.background = element_blank())
+    plot
   })
 }

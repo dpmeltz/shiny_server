@@ -36,8 +36,10 @@ ui <- dashboardPage(
                 box(plotOutput("plot1", height = 250)),
                 # box2
                 box(
-                  title = "Controls",
-                  sliderInput("slider", "Number of observations:", 1, 100, 50)
+                  title = "Date Range:",
+                  dateRangeInput("date", "Date Range:",
+                                 start = as.Date("2017-01-23"),
+                                 end = as.Date("2019-02-12"))
                 )
               )
       ),
