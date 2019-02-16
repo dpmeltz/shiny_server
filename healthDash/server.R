@@ -18,17 +18,16 @@ server <- function(input, output) {
   approval_topline$modeldate <- mdy(approval_topline$modeldate)
 
   approval_summary <- approval_topline %>%
-    filter(subgroup == "Voters") %>%
-    mutate(year = year(modeldate), month = month(modeldate)) %>%
-    group_by(year, month) %>%
-    mutate(Approval = mean(approve_estimate, na.rm = TRUE), Date = dmy(1/month/year)) %>%
-    select(Approval, year, month, Date)
+    filter(subgroup == "Voters")
+  ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
+
 
   output$plot1 <- renderPlot({
-    plot <- ggplot(approval_summary, aes(y = Approval, x = Date)) +
+    plot <- ggplot(approval_summary, aes(y = approve_estimate, x = modeldate)) +
       geom_point() +
-      scale_x_date(date_breaks = "6 months", date_labels = "%y-%m-%d") +
-      ylim(25,75) +
+      scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
+      ylim(ylim) +
+      xlim(input$date) +
       theme(axis.text.x = element_text(angle = 60, hjust = 1),
             panel.grid = element_blank(),
             panel.background = element_blank())
