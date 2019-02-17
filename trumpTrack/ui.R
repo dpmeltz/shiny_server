@@ -12,9 +12,9 @@ library(shinydashboard)
 
 ui <- dashboardPage(
   # skin
-  skin = "red",
+  skin = "yellow",
   # Dashboard title
-  dashboardHeader(title = "Basic dashboard"),
+  dashboardHeader(title = "Trump Tracker"),
   # Define sidebar
   dashboardSidebar(
     # Use sidebar as menu
@@ -33,14 +33,20 @@ ui <- dashboardPage(
               # Boxes need to be put in a row (or column)
               fluidRow(
                 # box1
-                box(plotOutput("plot1", height = 250)),
+                box(plotOutput("approval_plot", height = 250),
+                    width = 9),
                 # box2
                 box(
                   title = "Date Range:",
                   dateRangeInput("date", "Date Range:",
                                  start = as.Date("2017-01-23"),
-                                 end = as.Date("2019-02-12"))
-                )
+                                 end = as.Date("2019-02-12")),
+                  width = 3)
+              ),
+              fluidRow(
+                #box3
+                box(plotOutput("tweet_plot", height = 250),
+                    width = 9)
               )
       ),
 
