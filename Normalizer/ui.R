@@ -6,7 +6,7 @@ shinyUI(
   # Application title
   titlePanel("Area Under Normal Curve Finder"),
 
-  # Sidebar with a slider input for number of bins
+  # Sidebar with options to define curve values, cutoff scores & values
   sidebarLayout(
     sidebarPanel(
        numericInput("Mean",
@@ -20,7 +20,6 @@ shinyUI(
                     "Direction",
                     choices = c("Less Than", "Greater Than", "Between", "Outside"),
                     selected = "Less Than"),
-
        uiOutput("inputValues")
 
     ),

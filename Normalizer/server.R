@@ -4,10 +4,16 @@ library(ggplot2)
 # Define variables required to draw desired curve
 shinyServer(function(input, output) {
 
+  # Define inputs
   m <- reactive({as.numeric(input$Mean)})
   sigma <- reactive({as.numeric(input$SD)})
-  sample <- reactive({data.frame(rnorm(250, m(), sigma()))})
+  # Run a normal sample of n = 250
+  samp <- data.frame(rnorm(250))
+  colnames(samp) <- "xval" #Clean sample column name
+  # Transform sample according to inputs
+  sample <- reactive({(samp*sigma()) + m()})
 
+  # Render UI for one or two input scores
   output$inputValues <- renderUI({
 
     if (input$direction == "Between" | input$direction == "Outside")
@@ -25,43 +31,43 @@ shinyServer(function(input, output) {
                        step = .5)}
   })
 
+  #render curve plot
   output$distPlot <- renderPlot({
-    # generate curve based on input from ui.R
-    m <- m()
-    sigma <- sigma()
-    sample <- sample()
-    colnames(sample) <- "xval"
-    height <- dnorm(median(sample$xval), m, sigma)
-    scoreMin <- as.numeric(input$valmin)
-    scoreMax <- as.numeric(input$valmax)
+    # Define needed values using input from ui.R
+    m <- m() #Mean
+    sigma <- sigma() #SD
+    sample <- sample() #Sample values
+    height <- dnorm(median(sample$xval), m, sigma) #Determine curve height
+    scoreMin <- as.numeric(input$valmin) #Define lower score or only score
+    scoreMax <- as.numeric(input$valmax) #Define higher score
 
     # draw the density graph
     curve <- ggplot(aes(x = xval), data = sample) +
       stat_function(fun = dnorm, args = list(sd = sigma, mean = m),
-                    size = 2, color = "#979797") +
+                    size = 2, color = "#979797") + #Curve
       annotate('segment', x = m, xend = m + sigma,
                y = height*0.61, yend = height*0.61,
-               size = 2, alpha = 0.33) +
-      geom_vline(aes(xintercept = scoreMin), size = 1.5, color = "blue") +
+               size = 2, alpha = 0.33) + #SD Line
+      geom_vline(aes(xintercept = scoreMin), size = 1.5, color = "blue") + #Lower/only score
       annotate('segment', x = scoreMin,
                 xend = if
                  (input$direction == "Less Than" | input$direction == "Outside") {
                   scoreMin - (.33*sigma)} else {
                   scoreMin + (.33*sigma)},
                 y = height*1.05, yend = height*1.05, size = 1, color = "blue",
-                arrow = arrow(length = unit(0.33,"cm"))) +
-      geom_vline(aes(xintercept = m), size = 2, alpha = 0.33) +
-      xlim(m - (4*sigma), m + (4*sigma)) +
-      xlab("Scores") + ylab("") +
-      guides(size = FALSE) +
-      scale_y_continuous(limits = c(0, height*1.1)) +
+                arrow = arrow(length = unit(0.33,"cm"))) + #Directional arrow for lower/only score
+      geom_vline(aes(xintercept = m), size = 2, alpha = 0.33) + #Mean line
+      xlim(m - (4*sigma), m + (4*sigma)) + #Limit x to 4SD +/- from mean
+      xlab("Scores") + ylab("") + #X Label
+      guides(size = FALSE) + #No legend
+      scale_y_continuous(limits = c(0, height*1.1)) + #Set y axis from 0 to 10% more than max of curve
       theme(axis.ticks = element_blank(),
             axis.text.y = element_blank(),
             panel.background = element_rect(fill = FALSE),
             panel.grid.major = element_blank(),
             legend.position = "hidden")
 
-if (input$direction == "Less Than" | input$direction == "Greater Than") {curve}
+if (input$direction == "Less Than" | input$direction == "Greater Than") {curve} #If multiple add higher score line
     else {curve +
         geom_vline(aes(xintercept = scoreMax), size = 1.5, color = "red") +
         annotate('segment', x = scoreMax,
@@ -72,25 +78,28 @@ if (input$direction == "Less Than" | input$direction == "Greater Than") {curve}
           arrow = arrow(length = unit(0.33,"cm")))}
   })
 
+  #Render text description of area under curve selected
   output$areaText <- renderText({
-    # generate curve based on input from ui.R
+    #Define needed values using input from ui.R
     m <- m()
     sigma <- sigma()
     scoreMin <- as.numeric(input$valmin)
     scoreMax <- as.numeric(input$valmax)
 
-    minDown <- pnorm(scoreMin, m, sigma, lower.tail = TRUE)
-    minUp <- pnorm(scoreMin, m, sigma, lower.tail = FALSE)
-    maxDown <- pnorm(scoreMax, m, sigma, lower.tail = TRUE)
-    maxUp <- pnorm(scoreMax, m, sigma, lower.tail = FALSE)
+    #Calculate areas from lines
+    minDown <- pnorm(scoreMin, m, sigma, lower.tail = TRUE) #Lower down
+    minUp <- pnorm(scoreMin, m, sigma, lower.tail = FALSE) #Lower up
+    maxDown <- pnorm(scoreMax, m, sigma, lower.tail = TRUE) #Higher down
+    maxUp <- pnorm(scoreMax, m, sigma, lower.tail = FALSE) #Higher up
 
+    #Determine correct area from input
     area <- if (input$direction == "Less Than") {minDown} else
     if (input$direction == "Greater Than") {minUp} else
     if (input$direction == "Between") {minUp + maxDown - 1} else
     {minDown + maxUp}
 
+    #Generate text description
     paste("Roughly ",round(area*100,2),
           "% of the curve is within the selected area", sep = "")
   })
-
 })
