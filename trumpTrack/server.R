@@ -12,14 +12,16 @@ library(shinydashboard)
 library(tidyverse)
 library(lubridate)
 
-approval_topline <- read_csv("trumpTrack/approval_topline.csv")
-approval_topline$modeldate <- mdy(approval_topline$modeldate)
 
-tweets <- read_csv("trumpTrack/tweets.csv")
-tweets$date <- date(mdy_hm(tweets$created_at))
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+
+  approval_topline <- read_csv("approval_topline.csv")
+  approval_topline$modeldate <- mdy(approval_topline$modeldate)
+
+  tweets <- read_csv("tweets.csv")
+  tweets$date <- date(mdy_hm(tweets$created_at))
 
  approval_summary <- approval_topline %>%
     filter(subgroup == "Voters")
