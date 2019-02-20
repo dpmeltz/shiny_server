@@ -11,51 +11,34 @@ library(shiny)
 library(shinydashboard)
 
 ui <- dashboardPage(
-  # skin
-  skin = "yellow",
-  # Dashboard title
-  dashboardHeader(title = "Trump Tracker"),
-  # Define sidebar
+  dashboardHeader(title = "Basic dashboard"),
+  ## Sidebar content
   dashboardSidebar(
-    # Use sidebar as menu
     sidebarMenu(
-    # Menu1
-    menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
-    # Menu2
-    menuItem("Widgets", tabName = "widgets", icon = icon("th"))
-  )
+      menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
+      menuItem("Widgets", tabName = "widgets", icon = icon("th"))
+    )
   ),
+
   dashboardBody(
-    # Define tabs
     tabItems(
-      # Menu1 tab content
+      # First tab content
       tabItem(tabName = "dashboard",
-              # Boxes need to be put in a row (or column)
               fluidRow(
-                # box1
-                box(plotOutput("approval_plot", height = 250),
-                    width = 9),
-                # box2
+                box(plotOutput("plot1", height = 250)),
+
                 box(
-                  title = "Date Range:",
-                  dateRangeInput("date", "Date Range:",
-                                 start = as.Date("2017-01-23"),
-                                 end = as.Date("2019-02-12"),
-                                 format = "M-d-yy"),
-                  width = 3)
-              ),
-              fluidRow(
-                #box3
-                box(plotOutput("tweet_plot", height = 250),
-                    width = 9)
+                  title = "Controls",
+                  sliderInput("slider", "Number of observations:", 1, 100, 50)
+                )
               )
       ),
 
-      # Menu2 tab content
+      # Second tab content
       tabItem(tabName = "widgets",
               h2("Widgets tab content")
       )
     )
-
   )
+
 )
