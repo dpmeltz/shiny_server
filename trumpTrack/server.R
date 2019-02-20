@@ -15,17 +15,15 @@ library(lubridate)
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-  approval_topline <- read_csv("approval_topline.csv")
-  approval_topline$modeldate <- mdy(approval_topline$modeldate)
 
-  tweets <- read_csv("tweets.csv")
-  tweets$date <- date(mdy_hm(tweets$created_at))
-
- approval_summary <- approval_topline %>%
-    filter(subgroup == "Voters")
-  ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
 
   output$approval_plot <- renderPlot({
+    approval_topline <- read_csv("approval_topline.csv")
+    approval_topline$modeldate <- mdy(approval_topline$modeldate)
+
+    approval_summary <- approval_topline %>%
+      filter(subgroup == "Voters")
+    ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
     plot1 <- ggplot(approval_summary, aes(y = approve_estimate, x = modeldate)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(approve_estimate, na.rm = TRUE)), color = "darkred", alpha = .33) +
@@ -41,6 +39,10 @@ server <- function(input, output) {
   })
 
   output$tweet_plot <- renderPlot({
+
+    tweets <- read_csv("tweets.csv")
+    tweets$date <- date(mdy_hm(tweets$created_at))
+
     tweet_summary <- tweets %>%
       group_by(date) %>%
       summarize(n = n())
