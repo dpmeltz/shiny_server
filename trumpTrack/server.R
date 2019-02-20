@@ -15,16 +15,26 @@ library(lubridate)
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
+  approval_topline <- read_csv("./data/approval_topline.csv")
+  approval_topline$modeldate <- mdy(approval_topline$modeldate)
 
+  approval_summary <- approval_topline %>%
+    filter(subgroup == "Voters")
+  ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
+
+
+  tweets <- read_csv("./data/tweets.csv")
+  tweets$date <- date(mdy_hm(tweets$created_at))
+
+  tweet_summary <- tweets %>%
+    mutate(len = nchar(text)) %>%
+    group_by(date) %>%
+    summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
 
   output$approval_plot <- renderPlot({
-    approval_topline <- read_csv("./data/approval_topline.csv")
-    approval_topline$modeldate <- mdy(approval_topline$modeldate)
 
-    approval_summary <- approval_topline %>%
-      filter(subgroup == "Voters")
-    ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
-    plot1 <- ggplot(approval_summary, aes(y = approve_estimate, x = modeldate)) +
+
+    #plot1 <- ggplot(approval_summary, aes(y = approve_estimate, x = modeldate)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(approve_estimate, na.rm = TRUE)), color = "darkred", alpha = .33) +
       scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
@@ -35,20 +45,12 @@ server <- function(input, output) {
       theme(axis.text.x = element_text(angle = 60, hjust = 1),
             panel.grid = element_blank(),
             panel.background = element_blank())
-    plot1
+    #plot1
   })
 
   output$tweet_plot <- renderPlot({
 
-    tweets <- read_csv("./data/tweets.csv")
-    tweets$date <- date(mdy_hm(tweets$created_at))
-
-    tweet_summary <- tweets %>%
-      mutate(len = nchar(text)) %>%
-      group_by(date) %>%
-      summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
-
-    plot2 <- ggplot(tweet_summary, aes(x = date, y = n)) +
+    #plot2 <- ggplot(tweet_summary, aes(x = date, y = n)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(n, na.rm = TRUE)), color = "darkred", alpha = .33)+
       scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
@@ -59,7 +61,7 @@ server <- function(input, output) {
       theme(axis.text.x = element_text(angle = 60, hjust = 1),
             panel.grid = element_blank(),
             panel.background = element_blank())
-    plot2
+    #plot2
 
   })
 }
