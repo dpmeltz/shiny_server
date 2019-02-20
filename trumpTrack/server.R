@@ -18,7 +18,7 @@ server <- function(input, output) {
 
 
   output$approval_plot <- renderPlot({
-    approval_topline <- read_csv("approval_topline.csv")
+    approval_topline <- read_csv("./data/approval_topline.csv")
     approval_topline$modeldate <- mdy(approval_topline$modeldate)
 
     approval_summary <- approval_topline %>%
@@ -40,7 +40,7 @@ server <- function(input, output) {
 
   output$tweet_plot <- renderPlot({
 
-    tweets <- read_csv("tweets.csv")
+    tweets <- read_csv("./data/tweets.csv")
     tweets$date <- date(mdy_hm(tweets$created_at))
 
     tweet_summary <- tweets %>%
