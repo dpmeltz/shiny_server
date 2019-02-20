@@ -14,21 +14,22 @@ library(lubridate)
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-#  approval_topline <- read_csv("./data/approval_topline.csv")
-#  approval_topline$modeldate <- mdy(approval_topline$modeldate)
+  approval_topline <- read_csv("./data/approval_topline.csv")
+  approval_topline$modeldate <- mdy(approval_topline$modeldate)
 
-#  approval_summary <- approval_topline %>%
-#    filter(subgroup == "Voters")
-#  ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
+  approval_summary <- approval_topline %>%
+    filter(subgroup == "Voters")
+
+    ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
 
 
-#  tweets <- read_csv("./data/tweets.csv")
-#  tweets$date <- date(mdy_hm(tweets$created_at))
+  tweets <- read_csv("./data/tweets.csv")
+  tweets$date <- date(mdy_hm(tweets$created_at))
 
-#  tweet_summary <- tweets %>%
-#    mutate(len = nchar(text)) %>%
-#    group_by(date) %>%
-#    summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
+  tweet_summary <- tweets %>%
+    mutate(len = nchar(text)) %>%
+    group_by(date) %>%
+    summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
 
   output$approval_plot <- renderPlot({
 
