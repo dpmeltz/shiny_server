@@ -34,7 +34,7 @@ server <- function(input, output) {
   output$approval_plot <- renderPlot({
 
 
-    #plot1 <- ggplot(approval_summary, aes(y = approve_estimate, x = modeldate)) +
+    plot1 <- ggplot(approval_summary, aes(y = approve_estimate, x = modeldate)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(approve_estimate, na.rm = TRUE)), color = "darkred", alpha = .33) +
       scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
@@ -45,12 +45,12 @@ server <- function(input, output) {
       theme(axis.text.x = element_text(angle = 60, hjust = 1),
             panel.grid = element_blank(),
             panel.background = element_blank())
-    #plot1
+    plot1
   })
 
   output$tweet_plot <- renderPlot({
 
-    #plot2 <- ggplot(tweet_summary, aes(x = date, y = n)) +
+    plot2 <- ggplot(tweet_summary, aes(x = date, y = n)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(n, na.rm = TRUE)), color = "darkred", alpha = .33)+
       scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
@@ -61,7 +61,7 @@ server <- function(input, output) {
       theme(axis.text.x = element_text(angle = 60, hjust = 1),
             panel.grid = element_blank(),
             panel.background = element_blank())
-    #plot2
+    plot2
 
   })
 }

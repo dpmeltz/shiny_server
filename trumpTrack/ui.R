@@ -7,9 +7,6 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
-library(shinydashboard)
-
 ui <- dashboardPage(
   # skin
   skin = "yellow",
