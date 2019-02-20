@@ -44,8 +44,9 @@ server <- function(input, output) {
     tweets$date <- date(mdy_hm(tweets$created_at))
 
     tweet_summary <- tweets %>%
+      mutate(len = nchar(text)) %>%
       group_by(date) %>%
-      summarize(n = n())
+      summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
 
     plot2 <- ggplot(tweet_summary, aes(x = date, y = n)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
