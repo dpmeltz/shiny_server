@@ -7,9 +7,8 @@
 #    http://shiny.rstudio.com/
 #
 
-library(shiny)
-library(shinydashboard)
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
 library(lubridate)
 
 # Define server logic required to draw a histogram
