@@ -9,22 +9,12 @@
 
 library(shiny)
 library(shinydashboard)
-
-<<<<<<< HEAD
-=======
-
+library(tidyverse)
+library(lubridate)
 
 # Define server logic required to draw a histogram
->>>>>>> Testing
 server <- function(input, output) {
-  set.seed(122)
-  histdata <- rnorm(500)
 
-<<<<<<< HEAD
-  output$plot1 <- renderPlot({
-    data <- histdata[seq_len(input$slider)]
-    hist(data)
-=======
   approval_topline <- read_csv("approval_topline.csv")
   approval_topline$modeldate <- mdy(approval_topline$modeldate)
 
@@ -68,6 +58,5 @@ server <- function(input, output) {
             panel.background = element_blank())
     plot2
 
->>>>>>> Testing
   })
 }
