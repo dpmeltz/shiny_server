@@ -11,12 +11,13 @@ library(ggplot2)
 library(dplyr)
 library(lubridate)
 library(readr)
+library(stargazer)
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
   approval_topline <- read_csv("./data/approval_topline.csv")
-  approval_topline$modeldate <- mdy(approval_topline$modeldate)
+  approval_topline$date <- mdy(approval_topline$modeldate)
 
   approval_summary <- approval_topline %>%
     filter(subgroup == "Voters")
@@ -32,9 +33,11 @@ server <- function(input, output) {
     group_by(date) %>%
     summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
 
+  data <- left_join(approval_topline, tweet_summary, by = "date")
+
   output$approval_plot <- renderPlot({
 
-    plot1 <- ggplot(approval_summary, aes(y = approve_estimate, x = modeldate)) +
+    plot1 <- ggplot(approval_summary, aes(y = approve_estimate, x = date)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(approve_estimate, na.rm = TRUE)), color = "darkred", alpha = .33) +
       scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
@@ -63,5 +66,13 @@ server <- function(input, output) {
             panel.background = element_blank())
     plot2
 
+  })
+
+  output$regTable <- renderPrint({
+    useData <- data %>%
+      filter(date >= input$date[1] & date <= input$date[2])
+
+    regression <- lm(useData$n ~ useData$approve_estimate)
+    stargazer(regression, type = "html")
   })
 }

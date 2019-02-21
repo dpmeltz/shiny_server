@@ -34,8 +34,14 @@ ui <- dashboardPage(
               fluidRow(
                 # box1
                 box(plotOutput("approval_plot", height = 250),
-                    width = 9),
+                    width = 6),
+                #box3
+                box(plotOutput("tweet_plot", height = 250),
+                    width = 6)
                 # box2
+              ),
+              fluidRow(
+                box(htmlOutput("regTable", inline = FALSE)),
                 box(
                   title = "Date Range:",
                   dateRangeInput("date", "Date Range:",
@@ -43,11 +49,6 @@ ui <- dashboardPage(
                                  end = as.Date("2019-02-12"),
                                  format = "M-d-yy"),
                   width = 3)
-              ),
-              fluidRow(
-                #box3
-                box(plotOutput("tweet_plot", height = 250),
-                    width = 9)
               )
       ),
 
