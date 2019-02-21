@@ -47,8 +47,8 @@ ui <- dashboardPage(
                   dateRangeInput("date", "Date Range:",
                                  start = as.Date("2017-01-23"),
                                  end = as.Date("2019-02-12"),
-                                 format = "M-d-yy"),
-                  width = 3)
+                                 format = "M-d-yy")
+                  )
               )
       ),
 

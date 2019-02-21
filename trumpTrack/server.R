@@ -72,7 +72,7 @@ server <- function(input, output) {
     useData <- data %>%
       filter(date >= input$date[1] & date <= input$date[2])
 
-    regression <- lm(useData$n ~ useData$approve_estimate)
+    regression <- lm(useData$approve_estimate ~ useData$n)
     stargazer(regression, type = "html")
   })
 }
