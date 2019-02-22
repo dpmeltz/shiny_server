@@ -29,13 +29,13 @@ shinyServer(function(input, output) {
       valueH <- if(input$scaleH == 'Inches') {input$valueH * 2.54} else {input$valueH}
 
       plotH <- ggplot(dataH, aes(x = `Age (in months)`)) +
-        geom_point(aes(y = `50th Percentile Stature (in centimeters)`), alpha = .75) +
-        geom_point(aes(y = `75th Percentile Stature (in centimeters)`), color = "light blue", alpha = .5) +
-        geom_point(aes(y = `25th Percentile Stature (in centimeters)`), color = "light blue", alpha = .5) +
+        geom_line(aes(y = `50th Percentile Stature (in centimeters)`), alpha = .9) +
+        geom_line(aes(y = `75th Percentile Stature (in centimeters)`), color = "blue", alpha = .75) +
+        geom_line(aes(y = `25th Percentile Stature (in centimeters)`), color = "blue", alpha = .75) +
         geom_hline(aes(yintercept = valueH), color = "red") +
         geom_vline(aes(xintercept = input$age), color = "red") +
         xlim(c(input$age - 6, input$age + 6)) +
-        ylim(c(valueH * .75, valueH * 1.25))
+        ylim(c(valueH * .9, valueH * 1.1))
 
    plotH
 
@@ -52,13 +52,13 @@ shinyServer(function(input, output) {
       valueW <- if (input$scaleW == 'Pounds') {input$valueW / 2.205} else {input$valueW}
 
       plotW <- ggplot(dataW, aes(x = `Age (in months)`)) +
-        geom_point(aes(y = `50th Percentile Weight (in kilograms)`), alpha = .75) +
-        geom_point(aes(y = `75th Percentile Weight (in kilograms)`), color = "light blue", alpha = .5) +
-        geom_point(aes(y = `25th Percentile Weight (in kilograms)`), color = "light blue", alpha = .5) +
+        geom_line(aes(y = `50th Percentile Weight (in kilograms)`), alpha = .9) +
+        geom_line(aes(y = `75th Percentile Weight (in kilograms)`), color = "blue", alpha = .75) +
+        geom_line(aes(y = `25th Percentile Weight (in kilograms)`), color = "blue", alpha = .75) +
         geom_hline(aes(yintercept = valueW), color = "red") +
         geom_vline(aes(xintercept = input$age), color = "red") +
         xlim(c(input$age - 6, input$age + 6)) +
-        ylim(c(valueW * .75, valueW * 1.25))
+        ylim(c(valueW * .9, valueW * 1.1))
 
       plotW
 
