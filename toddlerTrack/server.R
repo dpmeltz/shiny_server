@@ -21,24 +21,46 @@ shinyServer(function(input, output) {
 
     output$heightPlot <- renderPlot({
     # filter data to gender
-      gender <- input$gender
+      genderH <- input$gender
 
-      data <- hchart %>%
-        filter(Gender == gender)
+      dataH <- hchart %>%
+        filter(Gender == genderH)
 
-      value <- if(input$scale == 'Inches') {input$value * 2.54} else {input$value}
+      valueH <- if(input$scaleH == 'Inches') {input$valueH * 2.54} else {input$valueH}
 
-      plotH <- ggplot(data, aes(x = `Age (in months)`)) +
-        geom_point(aes(y = `50th Percentile Stature (in centimeters)`), alpha = .50) +
-        geom_point(aes(y = `75th Percentile Stature (in centimeters)`), color = "light blue", alpha = .25) +
-        geom_point(aes(y = `25th Percentile Stature (in centimeters)`), color = "light blue", alpha = .25) +
-        geom_hline(aes(yintercept = value), color = "red") +
+      plotH <- ggplot(dataH, aes(x = `Age (in months)`)) +
+        geom_point(aes(y = `50th Percentile Stature (in centimeters)`), alpha = .75) +
+        geom_point(aes(y = `75th Percentile Stature (in centimeters)`), color = "light blue", alpha = .5) +
+        geom_point(aes(y = `25th Percentile Stature (in centimeters)`), color = "light blue", alpha = .5) +
+        geom_hline(aes(yintercept = valueH), color = "red") +
         geom_vline(aes(xintercept = input$age), color = "red") +
-        xlim(c(input$age-6, input$age+6)) +
-        ylim(c(value*.75, value*1.25))
+        xlim(c(input$age - 6, input$age + 6)) +
+        ylim(c(valueH * .75, valueH * 1.25))
 
    plotH
 
   })
 
+
+    output$weightPlot <- renderPlot({
+      # filter data to gender
+      genderW <- input$gender
+
+      dataW <- wchart %>%
+        filter(Gender == genderW)
+
+      valueW <- if (input$scaleW == 'Pounds') {input$valueW / 2.205} else {input$valueW}
+
+      plotW <- ggplot(dataW, aes(x = `Age (in months)`)) +
+        geom_point(aes(y = `50th Percentile Weight (in kilograms)`), alpha = .75) +
+        geom_point(aes(y = `75th Percentile Weight (in kilograms)`), color = "light blue", alpha = .5) +
+        geom_point(aes(y = `25th Percentile Weight (in kilograms)`), color = "light blue", alpha = .5) +
+        geom_hline(aes(yintercept = valueW), color = "red") +
+        geom_vline(aes(xintercept = input$age), color = "red") +
+        xlim(c(input$age - 6, input$age + 6)) +
+        ylim(c(valueW * .75, valueW * 1.25))
+
+      plotW
+
+    })
 })

@@ -8,8 +8,11 @@ dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Height", tabName = "height", icon = icon("arrow-circle-up")),
-      menuItem("Weight", tabName = "weight", icon = icon("weight"))
-    )
+      menuItem("Weight", tabName = "weight", icon = icon("weight")),
+      hr(),
+      radioButtons("gender", "Gender:", c("M","F"), selected = "M", inline = TRUE),
+      numericInput("age", "Age (in months):", min = 0, step = 1, value = 6)
+      )
   ),
 
   dashboardBody(
@@ -18,10 +21,8 @@ dashboardPage(
       tabItem(tabName = "height",
         fluidRow(
           box(
-            radioButtons("gender", "Gender:", c("M","F"), selected = "M", inline = TRUE),
-            numericInput("age", "Age (in months):", min = 0, step = 1, value = 6),
-            radioButtons("scale", "Scale:", c("Inches", "CM"), selected = "Inches", inline = TRUE),
-            numericInput("value", "Value:", min = 0, step = 0.5, value = 14),
+            radioButtons("scaleH", "Scale:", c("Inches", "CM"), selected = "Inches", inline = TRUE),
+            numericInput("valueH", "Value:", min = 0, step = 0.5, value = 14),
             width = 3
             ),
         fluidRow(
@@ -33,7 +34,17 @@ dashboardPage(
 
       # Second tab content
       tabItem(tabName = "weight",
-        h2("Widgets tab content")
+              fluidRow(
+                box(
+                  radioButtons("scaleW", "Scale:", c("Pounds", "KG"), selected = "Pounds", inline = TRUE),
+                  numericInput("valueW", "Value:", min = 0, step = 0.5, value = 30),
+                  width = 3
+                ),
+                fluidRow(
+                  box(plotOutput("weightPlot", height = 250),
+                      width = 8)
+                )
+              )
       )
     )
   )
