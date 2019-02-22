@@ -3,7 +3,7 @@ library(shinydashboard)
 
 # Define UI for application that plots child growth
 dashboardPage(
-  dashboardHeader(title = "Toddler Tracker"),
+  dashboardHeader(title = "Growth Tables"),
 
   dashboardSidebar(
     sidebarMenu(
