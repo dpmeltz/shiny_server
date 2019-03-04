@@ -12,11 +12,12 @@ library(dplyr)
 library(lubridate)
 library(readr)
 library(stargazer)
-
+library(httr)
+library(jsonlite)
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-  approval_topline <- read_csv("./data/approval_topline.csv")
+  approval_topline <- read_csv("https://projects.fivethirtyeight.com/trump-approval-data/approval_topline.csv")
   approval_topline$date <- mdy(approval_topline$modeldate)
 
   approval_summary <- approval_topline %>%
@@ -25,7 +26,10 @@ server <- function(input, output) {
     ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
 
 
-  tweets <- read_csv("./data/tweets.csv")
+    tmp <- tempfile()
+    download.file("https://github.com/bpb27/trump_tweet_data_archive/blob/master/condensed_2018.json.zip?raw=true", tmp)
+    tweets <- fromJSON(unz(tmp, "condensed_2018.json"))
+
   tweets$date <- date(mdy_hm(tweets$created_at))
 
   tweet_summary <- tweets %>%

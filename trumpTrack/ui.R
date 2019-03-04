@@ -22,7 +22,12 @@ ui <- dashboardPage(
     # Menu1
     menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
     # Menu2
-    menuItem("Widgets", tabName = "widgets", icon = icon("th"))
+    menuItem("Widgets", tabName = "widgets", icon = icon("th")),
+    # DateRangePicker
+    dateRangeInput("date", "Date Range:",
+                     start = as.Date("2017-01-23"),
+                     end = as.Date("2019-02-12"),
+                     format = "M-d-yy")
   )
   ),
   dashboardBody(
@@ -41,14 +46,7 @@ ui <- dashboardPage(
                 # box2
               ),
               fluidRow(
-                box(htmlOutput("regTable", inline = FALSE)),
-                box(
-                  title = "Date Range:",
-                  dateRangeInput("date", "Date Range:",
-                                 start = as.Date("2017-01-23"),
-                                 end = as.Date("2019-02-12"),
-                                 format = "M-d-yy")
-                  )
+                box(htmlOutput("regTable", inline = FALSE))
               )
       ),
 

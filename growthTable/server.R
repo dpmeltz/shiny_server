@@ -52,7 +52,7 @@ shinyServer(function(input, output) {
       valueW <- if (input$scaleW == 'Pounds') {input$valueW / 2.205} else {input$valueW}
 
       plotW <- ggplot(dataW, aes(x = `Age (in months)`)) +
-        geom_line(aes(y = `50th Percentile Weight (in kilograms)`), alpha = .9) +
+        geom_smooth(aes(y = `50th Percentile Weight (in kilograms)`), alpha = .9) +
         geom_line(aes(y = `75th Percentile Weight (in kilograms)`), color = "blue", alpha = .75) +
         geom_line(aes(y = `25th Percentile Weight (in kilograms)`), color = "blue", alpha = .75) +
         geom_hline(aes(yintercept = valueW), color = "red") +
