@@ -58,7 +58,7 @@ shinyServer(function(input, output) {
         geom_hline(aes(yintercept = valueW), color = "red") +
         geom_vline(aes(xintercept = input$age), color = "red") +
         xlim(c(input$age - 6, input$age + 6)) +
-        ylim(c(valueW * .9, valueW * 1.1))
+        ylim(c(valueW * .8, valueW * 1.2))
 
       plotW
 
