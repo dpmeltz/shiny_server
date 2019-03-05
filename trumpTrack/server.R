@@ -30,7 +30,7 @@ server <- function(input, output) {
     download.file("https://github.com/bpb27/trump_tweet_data_archive/blob/master/condensed_2018.json.zip?raw=true", tmp)
     tweets <- fromJSON(unz(tmp, "condensed_2018.json"))
 
-  tweets$date <- date(mdy_hm(tweets$created_at))
+  tweets$date <- date(parse_date_time(tweets$created_at, "a b d HMS z Y"))
 
   tweet_summary <- tweets %>%
     mutate(len = nchar(text)) %>%
