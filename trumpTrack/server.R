@@ -28,6 +28,7 @@ server <- function(input, output) {
     #tmp <- tempfile()
     #download.file("https://github.com/bpb27/trump_tweet_data_archive/blob/master/condensed_2019.json.zip?raw=true", tmp)
     #unz(tmp, "condensed_2019.json")
+    #unlink(tmp)
 
     tweets1 <- fromJSON("data/condensed_2018.json")
     tweets2 <- fromJSON("data/condensed_2017.json")
