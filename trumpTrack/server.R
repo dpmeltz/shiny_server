@@ -30,7 +30,7 @@ server <- function(input, output) {
     #unz(tmp, "condensed_2019.json")
 
     tweets1 <- fromJSON("data/condensed_2018.json")
-    tweets2 <- fromJSON( "data/condensed_2017.json")
+    tweets2 <- fromJSON("data/condensed_2017.json")
     tweets <- rbind(tweets1,tweets2)
 
   tweets$date <- date(parse_date_time(tweets$created_at, "a b d HMS z Y"))
