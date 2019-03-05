@@ -25,10 +25,13 @@ server <- function(input, output) {
 
     ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
 
+    #tmp <- tempfile()
+    #download.file("https://github.com/bpb27/trump_tweet_data_archive/blob/master/condensed_2019.json.zip?raw=true", tmp)
+    #unz(tmp, "condensed_2019.json")
 
-    tmp <- tempfile()
-    download.file("https://github.com/bpb27/trump_tweet_data_archive/blob/master/condensed_2018.json.zip?raw=true", tmp)
-    tweets <- fromJSON(unz(tmp, "condensed_2018.json"))
+    tweets1 <- fromJSON("data/condensed_2018.json")
+    tweets2 <- fromJSON( "data/condensed_2017.json")
+    tweets <- rbind(tweets1,tweets2)
 
   tweets$date <- date(parse_date_time(tweets$created_at, "a b d HMS z Y"))
 
