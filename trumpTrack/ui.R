@@ -22,7 +22,7 @@ ui <- dashboardPage(
     # Menu1
     menuItem("Dashboard", tabName = "dashboard", icon = icon("dashboard")),
     # Menu2
-    menuItem("Widgets", tabName = "widgets", icon = icon("th")),
+    menuItem("Sources", tabName = "sources", icon = icon("th")),
     # DateRangePicker
     dateRangeInput("date", "Date Range:",
                      start = as.Date("2017-01-23"),
@@ -51,8 +51,10 @@ ui <- dashboardPage(
       ),
 
       # Menu2 tab content
-      tabItem(tabName = "widgets",
-              h2("Widgets tab content")
+      tabItem(tabName = "sources",
+              h2("Data Sources"),
+              p(strong("Trump Approval Rating: "), a(href="https://github.com/fivethirtyeight/data/tree/master/trump-approval-ratings", "FiveThirtyEight.com")),
+              p(strong("Trump Tweet Data: "), a(href="http://www.trumptwitterarchive.com", "Trump Twitter Archive"))
       )
     )
 
