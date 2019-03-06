@@ -36,6 +36,7 @@ server <- function(input, output) {
     tweets3 <- fromJSON("data/condensed_2017.json")
 
     tweets2 <- rbind(tweets2,tweets3)
+
     tweets <- tweets2 %>%
       select(-in_reply_to_user_id_str) %>%
       rbind(tweets1)
