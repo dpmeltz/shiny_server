@@ -14,6 +14,7 @@ library(readr)
 library(stargazer)
 library(httr)
 library(jsonlite)
+
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
@@ -30,9 +31,14 @@ server <- function(input, output) {
     #unz(tmp, "condensed_2019.json")
     #unlink(tmp)
 
-    tweets1 <- fromJSON("data/condensed_2018.json")
-    tweets2 <- fromJSON("data/condensed_2017.json")
-    tweets <- rbind(tweets1,tweets2)
+    tweets1 <- fromJSON("data/condensed_2019.json")
+    tweets2 <- fromJSON("data/condensed_2018.json")
+    tweets3 <- fromJSON("data/condensed_2017.json")
+
+    tweets2 <- rbind(tweets2,tweets3)
+    tweets <- tweets2 %>%
+      select(-in_reply_to_user_id_str) %>%
+      rbind(tweets1)
 
   tweets$date <- date(parse_date_time(tweets$created_at, "a b d HMS z Y"))
 
