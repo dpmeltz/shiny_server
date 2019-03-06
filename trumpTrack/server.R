@@ -48,16 +48,18 @@ server <- function(input, output) {
     group_by(date) %>%
     summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
 
-  data <- left_join(approval_topline, tweet_summary, by = "date")
+  data <- left_join(approval_summary, tweet_summary, by = "date")
 
   output$approval_plot <- renderPlot({
 
-    plot1 <- ggplot(approval_summary, aes(y = approve_estimate, x = date)) +
+       useData <- data %>%
+            filter(date >= dateSelect()[1] & date <= dateSelect()[2])
+
+    plot1 <- ggplot(useData, aes(y = approve_estimate, x = date)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(approve_estimate, na.rm = TRUE)), color = "darkred", alpha = .33) +
       scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
       ylim(ylim) +
-      xlim(input$date) +
       xlab("Date") +
       ylab("FiveThirtyEight Approval Estimate") +
       theme(axis.text.x = element_text(angle = 60, hjust = 1),
@@ -68,12 +70,14 @@ server <- function(input, output) {
 
   output$tweet_plot <- renderPlot({
 
-    plot2 <- ggplot(tweet_summary, aes(x = date, y = n)) +
+        useData <- data %>%
+            filter(date >= dateSelect()[1] & date <= dateSelect()[2])
+
+    plot2 <- ggplot(useData, aes(x = date, y = n)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(n, na.rm = TRUE)), color = "darkred", alpha = .33) +
       scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
-      ylim(0,max(tweet_summary$n)) +
-      xlim(input$date) +
+      ylim(0,max(useData$n)) +
       xlab("Date") +
       ylab("Number of Tweets") +
       theme(axis.text.x = element_text(angle = 60, hjust = 1),
@@ -84,8 +88,8 @@ server <- function(input, output) {
   })
 
   output$regTable <- renderPrint({
-    useData <- data %>%
-      filter(date >= input$date[1] & date <= input$date[2])
+       useData <- data %>%
+            filter(date >= dateSelect()[1] & date <= dateSelect()[2])
 
     regression <- lm(useData$approve_estimate ~ useData$n)
     stargazer(regression, type = "html")
