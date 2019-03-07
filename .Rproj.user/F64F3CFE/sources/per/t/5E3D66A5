@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1551661183050.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2597417610",
+    "id" : "5E3D66A5",
+    "lastKnownWriteTime" : 1551921266,
+    "last_content_update" : 1551921266588,
+    "path" : "~/Documents/GitHub/shiny_server/trumpTrack/server.R",
+    "project_path" : "trumpTrack/server.R",
+    "properties" : {
+        "cursorPosition" : "91,52",
+        "scrollLine" : "78"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

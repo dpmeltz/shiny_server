@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1551921353852.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1396183385",
+    "id" : "A7677F7B",
+    "lastKnownWriteTime" : 1551921429,
+    "last_content_update" : 1551921429481,
+    "path" : "~/Documents/GitHub/shiny_server/.gitignore",
+    "project_path" : ".gitignore",
+    "properties" : {
+        "cursorPosition" : "39,1",
+        "scrollLine" : "18"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "gitignore"
+}
