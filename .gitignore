@@ -18,8 +18,8 @@
 /*.Rcheck/
 
 # RStudio files
-#.Rproj.user/
-#.Rproj
+.Rproj.user/
+.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -37,8 +37,8 @@ vignettes/*.pdf
 *.knit.md
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
-#rsconnect/
-#.Rproj.user
-#*.Rproj
+rsconnect/
+.Rproj.user
+*.Rproj
 packrat/lib*/
 packrat/src/
