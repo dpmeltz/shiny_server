@@ -6,9 +6,9 @@
 - [ ]Add definitions / descriptions for key terms
 
 # Normalizer
-- [ ]Fill in area
+- [ ]Fill in area @cancel
 - [ ]Remove initial blip-error
 - [ ]Keep score values consistent regardless of changing direction
 
 ## More Options
-- [ ]size (sd/sqrt(n))
+- [X]size (sd/sqrt(n))
