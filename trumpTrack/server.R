@@ -50,15 +50,19 @@ server <- function(input, output) {
 
   data <- left_join(approval_summary, tweet_summary, by = "date")
 
+  data$weekno <- (interval(min(data$date), data$date) %/% weeks(1)) + 1
+
   output$approval_plot <- renderPlot({
 
        useData <- data %>%
-            filter(date >= input$date[1] & date <= input$date[2])
+        filter(date >= input$date[1] & date <= input$date[2]) %>%
+        group_by(weekno) %>%
+         summarize(n = sum(n, na.rm = TRUE), avg_len = sum(avg_len, na.rm = TRUE), approve_estimate = mean(approve_estimate, na.rm = TRUE))
 
-    plot1 <- ggplot(useData, aes(y = approve_estimate, x = date)) +
+    plot1 <- ggplot(useData, aes(y = approve_estimate, x = weekno)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(approve_estimate, na.rm = TRUE)), color = "darkred", alpha = .33) +
-      scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
+      #scale_x_date(date_breaks = "2 month", date_labels = "%y-%m-%d") +
       ylim(ylim) +
       xlab("Date") +
       ylab("FiveThirtyEight Approval Estimate") +
@@ -70,13 +74,15 @@ server <- function(input, output) {
 
   output$tweet_plot <- renderPlot({
 
-        useData <- data %>%
-            filter(date >= input$date[1] & date <= input$date[2])
+       useData <- data %>%
+        filter(date >= input$date[1] & date <= input$date[2]) %>%
+        group_by(weekno) %>%
+         summarize(n = sum(n, na.rm = TRUE), avg_len = sum(avg_len, na.rm = TRUE), approve_estimate = mean(approve_estimate, na.rm = TRUE))
 
-    plot2 <- ggplot(useData, aes(x = date, y = n)) +
+    plot2 <- ggplot(useData, aes(x = weekno, y = n)) +
       geom_point(alpha = 0.25) + geom_smooth(span = 0.25, se = TRUE, color = "orange") +
       geom_hline(aes(yintercept = mean(n, na.rm = TRUE)), color = "darkred", alpha = .33) +
-      scale_x_date(date_breaks = "3 months", date_labels = "%y-%m-%d") +
+      #scale_x_date(date_breaks = "2 months", date_labels = "%y-%m-%d") +
       ylim(0,max(useData$n)) +
       xlab("Date") +
       ylab("Number of Tweets") +
@@ -89,7 +95,11 @@ server <- function(input, output) {
 
   output$regTable <- renderPrint({
        useData <- data %>%
-            filter(date >= input$date[1] & date <= input$date[2])
+        filter(date >= input$date[1] & date <= input$date[2]) %>%
+        group_by(weekno) %>%
+         summarize(n = sum(n, na.rm = TRUE), avg_len = sum(avg_len, na.rm = TRUE), approve_estimate = mean(approve_estimate, na.rm = TRUE))
+
+colnames(useData) <- c("Week", "n", "avg_len", "approve_estimate")
 
     regression <- lm(useData$approve_estimate ~ useData$n)
     stargazer(regression, type = "html")

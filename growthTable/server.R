@@ -29,7 +29,7 @@ shinyServer(function(input, output) {
       valueH <- if(input$scaleH == 'Inches') {input$valueH * 2.54} else {input$valueH}
 
       plotH <- ggplot(dataH, aes(x = `Age (in months)`)) +
-        geom_line(aes(y = `50th Percentile Stature (in centimeters)`), alpha = .9) +
+        geom_smooth(aes(y = `50th Percentile Stature (in centimeters)`), alpha = .9) +
         geom_line(aes(y = `75th Percentile Stature (in centimeters)`), color = "blue", alpha = .75) +
         geom_line(aes(y = `25th Percentile Stature (in centimeters)`), color = "blue", alpha = .75) +
         geom_hline(aes(yintercept = valueH), color = "red") +
