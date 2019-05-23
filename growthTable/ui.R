@@ -40,7 +40,10 @@ dashboardPage(
                       width = 8)
                 )
       ),
-      tabItem(tabName = "other")
+      tabItem(tabName = "other",
+              fluidRow(
+                box("Data for this tool is extracted from CDC.gov. The tool pulls the 25th, 50th, and 75th percentiles from the guidelines and plots them to the grids.",br(), br(),"No data entered is stored in any way.")
+              ))
     )
   )
 )
