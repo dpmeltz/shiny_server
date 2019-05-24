@@ -32,10 +32,14 @@ print(c("Hydration Percent = ", waterPercent, "%"))
 
       col1 <- c("Flour", "Starter Flour", "Water", "Starter Water")
       col2 <- c(flour(), starterFlour, water(), starterWater)
-      cpall <- c("Tan", "Brown", "Light Blue", "Blue")
+      cpall <- c("#fee6ce", "#fdae6b", "#deebf7", "#9ecae1")
       hydration <- data.frame(Source = col1, Weight = col2)
+      hydration$Source <- factor(hydration$Source, levels = col1)
 
-      ggplot(hydration, aes(x = 1, y = Weight)) + geom_col(position = 'fill', aes(fill = Source)) + scale_fill_manual(values = cpall)
+
+      ggplot(hydration, aes(x = 1, y = Weight)) +
+          geom_col(position = 'fill', aes(fill = Source)) +
+          scale_fill_manual(values = cpall)
     })
 
 
