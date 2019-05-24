@@ -12,7 +12,8 @@ dashboardPage(
             hr(),
             numericInput("Flour", "Flour (in gr):", min = 0, step = 5, value = 600),
             numericInput("Water", "Water (in gr):", min = 0, step = 5, value = 400),
-            numericInput("Starter", "Starter (in gr):", min = 0, step = 5, value = 250)
+            numericInput("Starter", "Starter (in gr):", min = 0, step = 5, value = 250),
+            sliderInput("StarterHydration", "Starter Hydration %", min = 50, max = 200, step = 5, value = 100)
         )
     ),
 
@@ -21,10 +22,13 @@ dashboardPage(
             # First tab content
             tabItem(tabName = "hydration",
                     fluidRow(
-                        box(plotOutput("hydrationPlot"))
+                        box(textOutput("hydrationText"))
                     )
             ),
-            tabItem(tabName = "Other")
+            tabItem(tabName = "other",
+                    fluidRow(
+                        box("This hydration tool is designed to help estimate the hydration percentage of a sourdough loaf. Hydration is calculated as the weight of water over the weight of flour (not water/total). "))
         )
     )
+)
 )
