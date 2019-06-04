@@ -53,7 +53,12 @@ shinyUI(
       h1(textOutput("sampleSize")),
       #graph output
       plotOutput("wafflePlot"),
-      textOutput("factorNote")
+      textOutput("factorNote"),
+      h2("Definitions"),
+      p(strong("Confidence Level: ")," The degree of certainty that the true mean score would be represented within the Margin of Error given the sample."),
+      p(strong("Population Size: ")," The total size of the group of people you intend to represent."),
+      p(strong("Margin of Error: ")," The width for the range of scores (+/-) around the estimated mean that is likely to contain the true mean."),
+      p(strong("Expected Response Rate: ")," The percent of invited people expected to respond.")
     )
   )
 ))

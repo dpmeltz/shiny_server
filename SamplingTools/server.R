@@ -74,12 +74,9 @@ shinyServer(function(input, output) {
                "Not Sampled" = nonSampSize)
     #Simplify by factor
     boxes <- round(boxes/10^factor, 0)
-    boxViz <- c("Requires Responses" = boxes["Required Responses"],
-                "Sampled" = boxes["Sampled"],
-                "Not Sampled" = boxes["Not Sampled"])
 
         # generate waffle plot based on Pop vs Samp
-    waffle <- waffle(boxViz,
+    waffle <- waffle(boxes,
                      rows = round(sqrt(sum(boxes))*.75,0),
                      size = .5,
                      equal = TRUE,
