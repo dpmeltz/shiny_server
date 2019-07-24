@@ -80,7 +80,7 @@ shinyServer(function(input, output) {
                      rows = round(sqrt(sum(boxes))*.75,0),
                      size = .5,
                      equal = TRUE,
-                     colors = c("#EBAC00", "#FFDF80", "#979797", "#FFFFFF")) +
+                     colors = c("#3060f0", "#fece3c", "#979797", "#FFFFFF")) +
       theme(legend.position = "bottom"
             )
     waffle
@@ -95,7 +95,7 @@ shinyServer(function(input, output) {
     factor <- if (factor < 0) {0} else {factor}
 
     factorNote <- c("NOTE: Each box represents ", 10^factor, if (factor < 1) {
-      " person"} else {" people"})
+      " person."} else {" people."}, " Boxes sometimes change by 1 due to rounding.")
 
     print(factorNote)
   })
