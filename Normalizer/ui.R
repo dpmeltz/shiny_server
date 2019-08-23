@@ -26,9 +26,13 @@ shinyUI(
     ),
 
     # Show a plot of the generated distribution and find the area described
-    mainPanel(
+    mainPanel( align = "center",
+      tags$style(type="text/css",
+                 ".shiny-output-error { visibility: hidden; }",
+                 ".shiny-output-error:before { visibility: hidden; }"
+      ),
        plotOutput("distPlot"),
-       em(textOutput("areaText"))
+       strong(textOutput("areaText"))
 
     )
 )
