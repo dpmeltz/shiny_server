@@ -15,42 +15,49 @@ library(stargazer)
 library(httr)
 library(jsonlite)
 
+DJI <- read.csv("~/Documents/GitHub/shiny_server/trumpTrack/data/DJI.csv")
+approval_topline <- read_csv("https://projects.fivethirtyeight.com/trump-approval-data/approval_topline.csv")
+approval_topline$date <- mdy(approval_topline$modeldate)
+
+approval_summary <- approval_topline %>%
+  filter(subgroup == "Voters")
+
+ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
+
+#tmp <- tempfile()
+#download.file("https://github.com/bpb27/trump_tweet_data_archive/blob/master/condensed_2019.json.zip?raw=true", tmp)
+#unz(tmp, "condensed_2019.json")
+#unlink(tmp)
+
+tweets1 <- fromJSON("trumptrack/data/condensed_2019.json")
+tweets2 <- fromJSON("trumptrack/data/condensed_2018.json")
+tweets3 <- fromJSON("trumptrack/data/condensed_2017.json")
+
+tweets2 <- rbind(tweets2,tweets3)
+
+tweets <- tweets2 %>%
+  select(-in_reply_to_user_id_str) %>%
+  rbind(tweets1)
+
+tweets$date <- date(parse_date_time(tweets$created_at, "a b d HMS z Y"))
+
+tweet_summary <- tweets %>%
+  mutate(len = nchar(text)) %>%
+  group_by(date) %>%
+  summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
+
+data <- left_join(approval_summary, tweet_summary, by = "date")
+
+DJI <- DJI %>%
+  mutate(date = as.Date(Date))
+
+data <- left_join(data, DJI, by = "date")
+
+data$weekno <- (interval(min(data$date), data$date) %/% weeks(1)) + 1
+
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-  approval_topline <- read_csv("https://projects.fivethirtyeight.com/trump-approval-data/approval_topline.csv")
-  approval_topline$date <- mdy(approval_topline$modeldate)
-
-  approval_summary <- approval_topline %>%
-    filter(subgroup == "Voters")
-
-    ylim <- c(min(approval_summary$approve_estimate),max(approval_summary$approve_estimate))
-
-    #tmp <- tempfile()
-    #download.file("https://github.com/bpb27/trump_tweet_data_archive/blob/master/condensed_2019.json.zip?raw=true", tmp)
-    #unz(tmp, "condensed_2019.json")
-    #unlink(tmp)
-
-    tweets1 <- fromJSON("data/condensed_2019.json")
-    tweets2 <- fromJSON("data/condensed_2018.json")
-    tweets3 <- fromJSON("data/condensed_2017.json")
-
-    tweets2 <- rbind(tweets2,tweets3)
-
-    tweets <- tweets2 %>%
-      select(-in_reply_to_user_id_str) %>%
-      rbind(tweets1)
-
-  tweets$date <- date(parse_date_time(tweets$created_at, "a b d HMS z Y"))
-
-  tweet_summary <- tweets %>%
-    mutate(len = nchar(text)) %>%
-    group_by(date) %>%
-    summarize(n = n(), avg_len = mean(len, na.rm = TRUE), sd_len = sd(len, na.rm=TRUE))
-
-  data <- left_join(approval_summary, tweet_summary, by = "date")
-
-  data$weekno <- (interval(min(data$date), data$date) %/% weeks(1)) + 1
 
   output$approval_plot <- renderPlot({
 
@@ -105,11 +112,12 @@ colnames(useData) <- c("Week", "n", "avg_len", "approve_estimate")
     stargazer(regression, type = "html")
   })
 
-  output$groupedPlot <- renderPlot({
+  output$DJIPlot <- renderPlot({
 
-  #  useData <- data %>%
-  # group_by(epiweek(date), year(date)) %>%
-  #  summarize(approval = mean(approve_estimate, na.rm = TRUE), tweets = sum(n, na.rm = TRUE))
+    data %>%
+      ggplot(aes(x = date, y = (Close-Open))) + geom_point()
+
+summary(lm((Close-Open) ~ (n*avg_len), data = data))
 
   })
 }
