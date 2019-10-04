@@ -22,7 +22,8 @@ dashboardPage(
             # First tab content
             tabItem(tabName = "hydration",
                     fluidRow(
-                        box(textOutput("hydrationText")),
+                        box(textOutput("hydrationText"))),
+                    fluidRow(
                         box(plotOutput(("hydrationPlot")))
                     )
             ),
