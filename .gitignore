@@ -42,3 +42,4 @@ rsconnect/
 *.Rproj
 packrat/lib*/
 packrat/src/
+.RData
