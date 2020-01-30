@@ -44,12 +44,16 @@ shinyServer(function(input, output) {
     cpall <- c("#fee6ce", "#fdae6b", "#deebf7", "#9ecae1")
     hydration <- data.frame(Source = col1, Weight = col2)
     hydration$Source <- factor(hydration$Source, levels = col1)
+    hydroper <- (water() + starterWater) / (flour() + starterFlour)
+    normper <- (water() + starterWater) / (sum(hydration$Weight))
+
 
     # Plot weight/total by source
     ggplot(hydration, aes(x = 1, y = Weight)) +
       geom_col(position = "fill", aes(fill = Source)) +
       scale_fill_manual(values = cpall) +
-      # geom_text() add label for water% at top of water bar
+      annotate("text", x = 1, y = normper*0.8,
+               label = paste0(round(hydroper*100,1),"%")) +
       theme_minimal() +
       theme(
         axis.title = element_blank(),
