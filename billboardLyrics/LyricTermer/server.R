@@ -12,8 +12,10 @@ library(dplyr)
 library(readr)
 library(ggplot2)
 library(stringr)
-#setwd("/cloud/project/billboardLyrics")
+setwd("/cloud/project/billboardLyrics/LyricTermer")
+
 lyricCorpus <- read_csv("lyric_corpus.csv")
+
 
 
 # Define server logic required to draw a histogram

@@ -9,7 +9,6 @@
 
 library(shiny)
 library(readr)
-lyricCorpus <- read_csv("lyric_corpus.csv")
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
