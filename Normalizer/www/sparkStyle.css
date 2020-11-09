@@ -1,27 +1,27 @@
 body {
   font-family: Calibri, helvetica, sans-serif;
-  background-color: #FFF;
+  background-color: #eeeeee;
 }
 
 .well {
-  background-color: #fffbe5;
+  background-color: #ffffff;
 }
 
 p, ul, li {
   font-size: 14px;
-  color: #3D3D3D;
+  color: #303751;
 }
 
 
 .title {
   margin-right: 100px;
   margin-left: 100px;
-  color: #fece3c;
+  color: #303751;
   font-weight: bold;
 }
 
 h1 {
-  color: #777777;
+  color: #172f79;
   font-size: 130%;
   font-weight: bold;
   font-style: italic;
@@ -29,16 +29,15 @@ h1 {
 }
 
 h2 {
-  color: #fff;
+  color: #172f79;
   font-size: 115%;
   font-weight: bold;
-  background: #3060f0;
   padding: 6px;
   text-align: center;
 }
 
 h3 {
-  color: #fff;
+  color: #3060f0;
   font-size: 110%;
   font-weight: bold;
 }
@@ -50,11 +49,11 @@ h4 {
 }
 
 hr {
-  background-color: #FFCC00;
+  background-color: #fece3c;
   height: 1px;
 }
 
 #factorNote, #wafflePlot {
-  color: #3D3D3D;
+  color: #3060f0;
   text-align: center;
   }
