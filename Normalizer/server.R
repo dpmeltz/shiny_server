@@ -47,7 +47,6 @@ shinyServer(function(input, output) {
                     size = 2, color = "#bbbbbb") + #Curve
       annotate('segment', x = m, xend = m + sigma,
                y = height*0.61, yend = height*0.61,
-      geom_vline(aes(xintercept = scoreMin), size = 1.5, color = "blue") + #Lower/only score
                size = 2, color = "#bbbbbb") + #SD Line
       geom_vline(aes(xintercept = scoreMin), size = 1.5, color = "#172f79") + #Lower/only score
       annotate('segment', x = scoreMin,
